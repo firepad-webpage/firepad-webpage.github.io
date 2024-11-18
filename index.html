@@ -61,14 +61,6 @@
             var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
                 { richTextToolbar: true, richTextShortcuts: true });
 
-            //// Initialize contents.
-            firepad.on('ready', function () {
-                if (firepad.isHistoryEmpty()) {
-                    firepad.setText('Welcome to Firepad');
-                    firepad.setUserId("Admin");
-                }
-            });
-
 
             //// Initialize contents.
             firepad.on('ready', function () {
@@ -104,11 +96,6 @@
             return ref;
         }
 
-
-        // Generate a random pad ID (for redirection).
-        function generateRandomId() {
-            return Math.random().toString(36).substring(2, 10); // 8-character random string
-        }
     </script>
 </body>
 
