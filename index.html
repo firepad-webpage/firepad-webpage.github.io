@@ -1,7 +1,7 @@
 
 
+
 <!doctype html>
-<!-- See http://www.firepad.io/docs/ for detailed embedding docs. -->
 <html>
 
 <head>
@@ -19,70 +19,63 @@
 
   <style>
     html { height: 100%; }
-    body { margin: 0; height: 100%; position: relative; }
-      /* Height / width / positioning can be customized for your use case.
-         For demo purposes, we make firepad fill the entire browser. */
-    #firepad-container {
-      width: 100%;
-      height: 100%;
+    body { margin: 0; height: 100%; position: relative; display: flex; flex-wrap: wrap; }
+    .firepad-container {
+      width: 48%;
+      height: 400px;
+      margin: 1%;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
 
 <body onload="init()">
-  <div id="firepad-container"></div>
-    
-  <script>
 
+  <!-- Multiple Firepad Containers -->
+  <div id="firepad-container-1" class="firepad-container"></div>
+  <div id="firepad-container-2" class="firepad-container"></div>
+  <div id="firepad-container-3" class="firepad-container"></div>
+
+  <script>
     function init() {
-        
       //// Initialize Firebase.
       const firebaseConfig = {
-  apiKey: "AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo",
-  authDomain: "firepad-web.firebaseapp.com",
-  databaseURL: "https://firepad-web-default-rtdb.firebaseio.com",
-  projectId: "firepad-web",
-  storageBucket: "firepad-web.firebasestorage.app",
-  messagingSenderId: "781381644909",
-  appId: "1:781381644909:web:5cbb91811185498e0a4564",
-  measurementId: "G-C3LP1GKZYE"
-};
-      const app = firebase.initializeApp(firebaseConfig);
-    //   const analytics = getAnalytics(app);
-      //// Get Firebase Database reference.
-      var firepadRef = getExampleRef();
+        apiKey: "AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo",
+        authDomain: "firepad-web.firebaseapp.com",
+        databaseURL: "https://firepad-web-default-rtdb.firebaseio.com",
+        projectId: "firepad-web",
+        storageBucket: "firepad-web.firebasestorage.app",
+        messagingSenderId: "781381644909",
+        appId: "1:781381644909:web:5cbb91811185498e0a4564",
+        measurementId: "G-C3LP1GKZYE"
+      };
+      firebase.initializeApp(firebaseConfig);
 
-      //// Create CodeMirror (with lineWrapping on).
-      var codeMirror = CodeMirror(document.getElementById('firepad-container'), { lineWrapping: true });
-
-      //// Create Firepad (with rich text toolbar and shortcuts enabled).
-      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
-          { richTextToolbar: true, richTextShortcuts: true });
-
-      //// Initialize contents.
-      firepad.on('ready', function() {
-        if (firepad.isHistoryEmpty()) {
-          firepad.setText('Welcome to Firepad');
-          firepad.setUserId("Admin");
-        }
-      });        
-
+      // Create multiple Firepad instances
+      createFirepad("firepad-container-1", "firepad-doc-1");
+      createFirepad("firepad-container-2", "firepad-doc-2");
+      createFirepad("firepad-container-3", "firepad-doc-3");
     }
 
-    // Helper to get hash from end of URL or generate a random one.
-    function getExampleRef() {
-      var ref = firebase.database().ref();
-      var hash = window.location.hash.replace(/#/g, '');
-      if (hash) {
-        ref = ref.child(hash);
-      } else {
-        ref = ref.push(); // generate unique location.
-        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
-      }
-      if (typeof console !== 'undefined') {
-        console.log('Firebase data: ', ref.toString());
-      }
-      return ref;
+    function createFirepad(containerId, documentId) {
+      //// Get Firebase Database reference for this document.
+      var firepadRef = firebase.database().ref(documentId);
+
+      //// Create CodeMirror for this container.
+      var codeMirror = CodeMirror(document.getElementById(containerId), { lineWrapping: true });
+
+      //// Create Firepad (with rich text toolbar and shortcuts enabled).
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror, {
+        richTextToolbar: true,
+        richTextShortcuts: true
+      });
+
+      //// Initialize contents.
+      firepad.on("ready", function () {
+        if (firepad.isHistoryEmpty()) {
+          firepad.setText(`Welcome to Firepad instance ${documentId}`);
+        }
+      });
     }
   </script>
 </body>
