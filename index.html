@@ -84,10 +84,9 @@
             } else {
                 // If no pad name is provided, generate a random one
                 ref = ref.push(); // Generate a unique location
-                const newPadName = ref.key; // Get the generated key
                 // Redirect to the new pad with its name in the URL
-                window.location = window.location.origin + window.location.pathname + '?pad=' + newPadName;
-                return; // Stop further execution during redirection
+                window.location = window.location + '?pad=' + ref.key;
+                return ref; // Stop further execution during redirection
             }
 
             if (typeof console !== 'undefined') {
@@ -95,6 +94,9 @@
             }
             return ref;
         }
+
+
+
 
     </script>
 </body>
