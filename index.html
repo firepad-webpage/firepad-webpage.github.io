@@ -31,9 +31,12 @@
 
 <body onload="init()">
   <div id="firepad-container"></div>
-
+    
   <script>
+    import { initializeApp } from "firebase/app";
+    import { getAnalytics } from "firebase/analytics";
     function init() {
+        
       //// Initialize Firebase.
       const firebaseConfig = {
   apiKey: "AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo",
@@ -45,8 +48,8 @@
   appId: "1:781381644909:web:5cbb91811185498e0a4564",
   measurementId: "G-C3LP1GKZYE"
 };
-      firebase.initializeApp(config);
-
+      const app = firebase.initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
       //// Get Firebase Database reference.
       var firepadRef = getExampleRef();
 
