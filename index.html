@@ -1,71 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
+
+
+<!doctype html>
+<!-- See http://www.firepad.io/docs/ for detailed embedding docs. -->
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firepad Example</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.css">
-    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-database.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/firepad@1.5.10/dist/firepad.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/codemirror.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f5f5f5;
-        }
-        #firepad-container {
-            width: 80%;
-            height: 80%;
-            border: 1px solid #ccc;
-            background-color: #fff;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+
+  <!-- CodeMirror -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+
+  <!-- Firepad -->
+  <link rel="stylesheet" href="https://firepad.io/releases/v1.5.9/firepad.css" />
+  <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
+
+  <style>
+    html { height: 100%; }
+    body { margin: 0; height: 100%; position: relative; }
+      /* Height / width / positioning can be customized for your use case.
+         For demo purposes, we make firepad fill the entire browser. */
+    #firepad-container {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
 </head>
-<body>
-    <div id="firepad-container"></div>
 
-    <script>
-        // Firebase Configuration (Replace with your Firebase config)
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "firebase/app";
-        import { getAnalytics } from "firebase/analytics";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
+<body onload="init()">
+  <div id="firepad-container"></div>
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-        apiKey: "AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo",
-        authDomain: "firepad-web.firebaseapp.com",
-        databaseURL: "https://firepad-web-default-rtdb.firebaseio.com",
-        projectId: "firepad-web",
-        storageBucket: "firepad-web.firebasestorage.app",
-        messagingSenderId: "781381644909",
-        appId: "1:781381644909:web:5cbb91811185498e0a4564",
-        measurementId: "G-C3LP1GKZYE"
-        };
+  <script>
+    function init() {
+      //// Initialize Firebase.
+      //// TODO: replace with your Firebase project configuration.
+      var config = {
+        apiKey: 'AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo',
+        authDomain: "firepad-gh-tests.firebaseapp.com",
+        databaseURL: "https://firepad-gh-tests.firebaseio.com"
+      };
+      firebase.initializeApp(config);
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+      //// Get Firebase Database reference.
+      var firepadRef = getExampleRef();
 
-        // Initialize CodeMirror (the text editor)
-        const codeMirror = CodeMirror(document.getElementById('firepad-container'), {
-            lineNumbers: true,
-            mode: 'markdown',
-            theme: 'default',
-        });
+      //// Create CodeMirror (with lineWrapping on).
+      var codeMirror = CodeMirror(document.getElementById('firepad-container'), { lineWrapping: true });
 
-        // Initialize Firepad with the database reference
-        const firepadRef = db.ref('documents/newDocument');  // New document path in Firebase
-        const firepad = Firepad.fromCodeMirror(firepadRef, codeMirror);
-    </script>
+      //// Create Firepad (with rich text toolbar and shortcuts enabled).
+      var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
+          { richTextToolbar: true, richTextShortcuts: true });
+
+      //// Initialize contents.
+      firepad.on('ready', function() {
+        if (firepad.isHistoryEmpty()) {
+          firepad.setHtml('<span style="font-size: 24px;">Rich-text editing with <span style="color: red">Firepad!</span></span><br/><br/>Collaborative-editing made easy.\n');
+        }
+      });
+    }
+
+    // Helper to get hash from end of URL or generate a random one.
+    function getExampleRef() {
+      var ref = firebase.database().ref();
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+      }
+      return ref;
+    }
+  </script>
 </body>
 </html>
