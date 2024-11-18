@@ -59,6 +59,19 @@
           firepad.setHtml('<span style="font-size: 24px;">Rich-text editing with <span style="color: red">Firepad!</span></span><br/><br/>Collaborative-editing made easy.\n');
         }
       });
+
+      // Listen to changes in Firepad
+        firepad.on('synced', (isSynced) => {
+            if (isSynced) {
+                const changes = firepadRef.get(); // Get the latest changes
+                const logRef = ref(db, 'history'); // Log changes to a new path
+                push(logRef, {
+                    changes: changes,
+                    timestamp: Date.now()
+                });
+            }
+        });
+
     }
 
     // Helper to get hash from end of URL or generate a random one.
