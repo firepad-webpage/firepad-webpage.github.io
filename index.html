@@ -74,7 +74,8 @@
                             const params = new URLSearchParams(window.location.search);
                             const endpoint = params.get("pad");
 
-                            getUserData().then(userData => {
+                            getUserData()
+                            .then(userData => {
                                 if (userData) {
                                     console.log(userData);
                                     const userMap = new Map(userData.map(user => [user.id, user]));
@@ -86,17 +87,13 @@
                                     console.log(url_lst);
 
                                     if (url_lst.includes(endpoint)) {
-                                        firepad.setText(user.content);
+                                        firepad.setHtml(generateHtml(content));
                                     }
                                     
                                 } 
-                            });
-
-                            
+                            });            
                         }
-                    });
-                    
-                    
+                    });                      
                 }
             });
         }
@@ -157,6 +154,12 @@
                 });
         }
 
+        function generateHtml(content) {
+            return `
+                <span style="font-size: 36px;">Welcome User</span><br/><br/>
+                <span style="font-size: 24px;">${content}</span>
+            `;
+        }
 
 
     </script>
