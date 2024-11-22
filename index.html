@@ -66,10 +66,11 @@
             firepad.on('ready', function () {
                 if (firepad.isHistoryEmpty()) {
                     const url_lst = getUserList();
-                    const result = window.location.href.split("=");
+                    const url = window.location.href;
+                    const result = url.split("=");
                     const endpoint = result[1];
                     console.log(endpoint);
-                    console.log(result);
+                    console.log(window.location.href);
                     console.log(url_lst);
                     if (url_lst.includes(endpoint)) {
                         firepad.setText('Welcome to your unique Firepad!'+ endpoint);
