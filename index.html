@@ -68,8 +68,13 @@
                     const url_lst = getUserList();
                     const result = window.location.href.split("=");
                     const endpoint = result[1];
-                    if (url_lst.includes(endpoint))
-                    firepad.setText('Welcome to your unique Firepad!'+ endpoint);
+                    console.log(endpoint);
+                    console.log(result);
+                    console.log(url_lst);
+                    if (url_lst.includes(endpoint)) {
+                        firepad.setText('Welcome to your unique Firepad!'+ endpoint);
+                    }
+                    
                 }
             });
         }
