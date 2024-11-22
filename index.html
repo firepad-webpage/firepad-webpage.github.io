@@ -70,16 +70,18 @@
                             console.error("Error:", error);
                         } else {
                             console.log(url_lst); // Use the items here
+
+                            const params = new URLSearchParams(window.location.search);
+                            const endpoint = params.get("pad");
+                            console.log(endpoint);
+                            console.log(window.location.href);
+                            console.log(url_lst);
+                            if (url_lst.includes(endpoint)) {
+                                firepad.setText('Welcome to your unique Firepad!'+ endpoint);
+                            }
                         }
                     });
-                    const params = new URLSearchParams(window.location.search);
-                    const endpoint = params.get("pad");
-                    console.log(endpoint);
-                    console.log(window.location.href);
-                    console.log(url_lst);
-                    if (url_lst.includes(endpoint)) {
-                        firepad.setText('Welcome to your unique Firepad!'+ endpoint);
-                    }
+                    
                     
                 }
             });
