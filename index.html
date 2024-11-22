@@ -65,7 +65,11 @@
             //// Initialize contents.
             firepad.on('ready', function () {
                 if (firepad.isHistoryEmpty()) {
-                    firepad.setText('Welcome to your unique Firepad!');
+                    const url_lst = getUserList();
+                    const result = window.location.href.split("=");
+                    const endpoint = result[1];
+                    if (url_lst.includes(endpoint))
+                    firepad.setText('Welcome to your unique Firepad!'+ endpoint);
                 }
             });
         }
@@ -93,6 +97,19 @@
                 console.log('Firebase data: ', ref.toString());
             }
             return ref;
+        }
+
+        function getUserList() {
+            fetch("userList.csv")
+                .then(r => r.text())
+                .then(text => {
+                    const items = text.split(",").map(item => item.trim()); // Split by commas and trim each item
+                    console.log(items);
+                })
+                .catch(error => {
+                    console.error("Error fetching or parsing the file:", error);
+                });
+            return items;
         }
 
 
