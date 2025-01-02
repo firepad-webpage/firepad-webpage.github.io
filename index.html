@@ -124,7 +124,7 @@
                         if (error) {
                             console.error("Error:", error);
                         } else {
-                            console.log(url_lst); // Use the items here
+                            console.log(contactIds); // Use the items here
 
                             const params = new URLSearchParams(window.location.search);
                             const endpoint = params.get("pad");
@@ -191,10 +191,11 @@
                 ref = ref.child(padName);
             } else {
                 // If no pad name is provided, generate a random one
-                ref = ref.push(); // Generate a unique location
-                // Redirect to the new pad with its name in the URL
-                window.location = window.location + '?pad=' + ref.key;
-                return ref; // Stop further execution during redirection
+                // ref = ref.push(); // Generate a unique location
+                // // Redirect to the new pad with its name in the URL
+                // window.location = window.location + '?pad=' + ref.key;
+                // return ref; // Stop further execution during redirection
+                console.error("No 'pad' parameter found in the URL. Please include a valid Contact Id.");
             }
 
             if (typeof console !== 'undefined') {
