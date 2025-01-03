@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 <html>
 
 <head>
@@ -341,6 +341,200 @@
                 });
         }
 
+
+        function generateHtml(content) {
+            return `
+                <span style="font-size: 36px;">Welcome User</span><br/><br/>
+                <span style="font-size: 24px;">${content}</span>
+            `;
+        }
+    </script>
+</body>
+
+</html> -->
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Firepad with Instructions</title>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.4/firebase.js"></script>
+
+    <!-- CodeMirror -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.17.0/codemirror.css" />
+
+    <!-- Firepad -->
+    <link rel="stylesheet" href="https://firepad.io/releases/v1.5.9/firepad.css" />
+    <script src="https://firepad.io/releases/v1.5.9/firepad.min.js"></script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Instructions Area */
+        #instructions {
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Firepad Container */
+        #firepad-container {
+            flex: 1; /* Take up remaining space */
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Optional: Style the instructions text */
+        #instructions p {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body onload="init()">
+    <!-- Instructions Area -->
+    <div id="instructions">
+        space for instructions
+    </div>
+
+    <!-- Firepad Container -->
+    <div id="firepad-container"></div>
+
+    <script>
+        function init() {
+            //// Initialize Firebase.
+            const firebaseConfig = {
+                apiKey: "AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo",
+                authDomain: "firepad-web.firebaseapp.com",
+                databaseURL: "https://firepad-web-default-rtdb.firebaseio.com",
+                projectId: "firepad-web",
+                storageBucket: "firepad-web.firebasestorage.app",
+                messagingSenderId: "781381644909",
+                appId: "1:781381644909:web:5cbb91811185498e0a4564",
+                measurementId: "G-C3LP1GKZYE"
+            };
+
+            const app = firebase.initializeApp(firebaseConfig);
+            //   const analytics = getAnalytics(app);
+            //// Get Firebase Database reference.
+            var firepadRef = getExampleRef();
+
+            //// Create CodeMirror (with lineWrapping on).
+            var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
+                lineWrapping: true
+            });
+
+            //// Create Firepad (with rich text toolbar and shortcuts enabled).
+            var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
+                { richTextToolbar: true, richTextShortcuts: true });
+
+
+            //// Initialize contents.
+            firepad.on('ready', function () {
+                if (firepad.isHistoryEmpty()) {
+                    getUserList((error, url_lst) => {
+                        if (error) {
+                            console.error("Error:", error);
+                        } else {
+                            console.log(url_lst); // Use the items here
+
+                            const params = new URLSearchParams(window.location.search);
+                            const endpoint = params.get("pad");
+
+                            getUserData()
+                                .then(userData => {
+                                    if (userData) {
+                                        console.log(userData);
+                                        const userMap = new Map(userData.map(user => [user.id, user]));
+                                        const user = userMap.get(endpoint);
+                                        console.log(user.content);
+
+                                        console.log(endpoint);
+                                        console.log(window.location.href);
+                                        console.log(url_lst);
+
+                                        if (url_lst.includes(endpoint)) {
+                                            firepad.setHtml(generateHtml(user.content));
+                                        }
+
+                                    }
+                                });
+                        }
+                    });
+                }
+            });
+        }
+
+        function getExampleRef() {
+            // Get the Firebase database reference
+            var ref = firebase.database().ref();
+
+            // Extract the desired pad name from the URL (using the query parameter `?pad=`)
+            var urlParams = new URLSearchParams(window.location.search);
+            var padName = urlParams.get('pad'); // Looks for `pad=<name>` in the URL
+
+            if (padName) {
+                // Use the specified pad name as the Firebase reference
+                ref = ref.child(padName);
+            } else {
+                // If no pad name is provided, generate a random one
+                ref = ref.push(); // Generate a unique location
+                // Redirect to the new pad with its name in the URL
+                window.location = window.location + '?pad=' + ref.key;
+                return ref; // Stop further execution during redirection
+            }
+
+            if (typeof console !== 'undefined') {
+                console.log('Firebase data: ', ref.toString());
+            }
+            return ref;
+        }
+
+        function getUserList(callback) {
+            fetch("userList.csv")
+                .then(r => r.text())
+                .then(text => {
+                    const items = text.split(",").map(item => item.trim());
+                    callback(null, items); // Invoke the callback with the items
+                })
+                .catch(error => {
+                    console.error("Error fetching or parsing the file:", error);
+                    callback(error, []); // Invoke the callback with an error
+                });
+        }
+
+        function getUserData() {
+            return fetch("userContent.json")
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json(); // Parse JSON into a JavaScript object
+                })
+                .then(jsonData => {
+                    console.log(jsonData); // Log the parsed JSON
+                    return jsonData; // Return the parsed data
+                })
+                .catch(error => {
+                    console.error("Error fetching or parsing the JSON file:", error);
+                    return null; // Return null or handle the error as needed
+                });
+        }
 
         function generateHtml(content) {
             return `
