@@ -84,8 +84,9 @@
                 appId: "1:781381644909:web:5cbb91811185498e0a4564",
                 measurementId: "G-C3LP1GKZYE"
             };
-            var firepadRef = firebase.database().ref();
             const app = firebase.initializeApp(firebaseConfig);
+
+            var firepadRef = firebase.database().ref();
 
             // Create CodeMirror (with lineWrapping on).
             var codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
@@ -93,7 +94,31 @@
             // Create Firepad (with rich text toolbar and shortcuts enabled).
             var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
                 { richTextShortcuts: true, richTextToolbar: true, defaultText: 'Hello, World!' });
+                firepad.on('ready', function() {
+        if (firepad.isHistoryEmpty()) {
+          firepad.setHtml('<span style="font-size: 24px;">Rich-text editing with <span style="color: red">Firepad!</span></span><br/><br/>Collaborative-editing made easy.\n');
+        }
+      });  
 
+      firepad.setText("Welcome to Firepad");
+      firepad.setUser("Admin");
+
+    }
+
+    // Helper to get hash from end of URL or generate a random one.
+    function getExampleRef() {
+      var ref = firebase.database().ref();
+      var hash = window.location.hash.replace(/#/g, '');
+      if (hash) {
+        ref = ref.child(hash);
+      } else {
+        ref = ref.push(); // generate unique location.
+        window.location = window.location + '#' + ref.key; // add it as a hash to the URL.
+      }
+      if (typeof console !== 'undefined') {
+        console.log('Firebase data: ', ref.toString());
+      }
+      return ref;
             
         //     //   const analytics = getAnalytics(app);
         //     //// Get Firebase Database reference.
