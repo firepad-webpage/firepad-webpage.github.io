@@ -85,6 +85,7 @@
                 measurementId: "G-C3LP1GKZYE"
             };
             var firepadRef = firebase.database().ref();
+            const app = firebase.initializeApp(firebaseConfig);
 
             // Create CodeMirror (with lineWrapping on).
             var codeMirror = CodeMirror(document.getElementById('firepad'), { lineWrapping: true });
@@ -93,7 +94,7 @@
             var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
                 { richTextShortcuts: true, richTextToolbar: true, defaultText: 'Hello, World!' });
 
-        //     const app = firebase.initializeApp(firebaseConfig);
+            
         //     //   const analytics = getAnalytics(app);
         //     //// Get Firebase Database reference.
         //     var firepadRef = getExampleRef();
