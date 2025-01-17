@@ -151,7 +151,7 @@
                                 }
 
                                 // Populate Firepad with the abstract content
-                                firepad.setHtml(generateHtml(articleData.abstract));
+                                firepad.setHtml(generateHtml(articleData.abstract, articleData.article));
 
                                 console.log("Endpoint:", endpoint);
                                 console.log("Current URL:", window.location.href);
@@ -229,43 +229,50 @@
                     return response.text();
                 })
                 .then(csvText => {
-                    // Split the CSV into rows
-                    const rows = csvText.trim().split("\n");
-                    if (rows.length === 0) {
-                        throw new Error("CSV is empty");
-                    }
+                  Papa.parse(csvText, {
+                      header: true, // Automatically parse headers
+                      skipEmptyLines: true, // Skip any empty lines in the CSV
+                      complete: function(results) {
+                          const data = results.data; // The parsed rows
+                          const errors = results.errors; // Any parsing errors
 
-                    // Extract headers
-                    const headers = rows[0].split(",").map(header => header.trim());
-                    const articleIndex = headers.indexOf("article");
-                    const abstractIndex = headers.indexOf("abstract");
+                          if (errors.length > 0) {
+                              throw new Error("Error parsing CSV: " + errors[0].message);
+                          }
 
-                    if (articleIndex === -1 || abstractIndex === -1) {
-                        throw new Error('"article" and/or "abstract" columns not found in the CSV header');
-                    }
+                          // Check for the required columns
+                          if (!results.meta.fields.includes("article") || !results.meta.fields.includes("abstract")) {
+                              throw new Error('"article" and/or "abstract" columns not found in the CSV header');
+                          }
 
-                    // Parse each row into an object with 'article' and 'abstract'
-                    const articles = rows.slice(1).map(row => {
-                        const columns = row.split(",").map(col => col.trim());
-                        return {
-                            article: columns[articleIndex],
-                            abstract: columns[abstractIndex]
-                        };
-                    });
+                          // Extract articles with 'article' and 'abstract' fields
+                          const articles = data.map(row => ({
+                              article: row.article.trim(), // Trim any extra spaces
+                              abstract: row.abstract.trim()
+                          }));
 
-                    callback(null, articles);
-                })
-                .catch(error => {
-                    console.error("Error fetching or parsing the CSV file:", error);
-                    callback(error, []);
-                });
-        }
+                          callback(null, articles); // Pass articles to the callback
+                      },
+                      error: function(err) {
+                          console.error("Parsing error:", err);
+                          callback(err, []);
+                      }
+                  });
+              })
+              .catch(error => {
+                  console.error("Error fetching or parsing the CSV file:", error);
+                  callback(error, []);
+              });}
+
+        
 
 
-        function generateHtml(content) {
+        function generateHtml(abstract, article) {
             return `
                 <span style="font-size: 36px;">Welcome User</span><br/><br/>
-                <span style="font-size: 24px;">${content}</span>
+                <span style="font-size: 24px;">${article}</span>
+                <br>
+                <span style="font-size: 24px;">${abstract}</span>
             `;
         }
     </script>
