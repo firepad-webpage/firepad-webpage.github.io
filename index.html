@@ -190,6 +190,7 @@
                     return response.text();
                 })
                 .then(csvText => {
+                  console.log("CSV Content:", csvText); 
                     Papa.parse(csvText, {
                         header: true, 
                         skipEmptyLines: true,
