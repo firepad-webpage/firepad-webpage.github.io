@@ -196,12 +196,14 @@
                         complete: function(results) {
                             if (!results.meta.fields.includes("Contact Id")) {
                                 callback(new Error('"Contact Id" column not found'), []);
+                                console.log("parseif");
                                 return;
                             }
                             const contactIds = results.data.map(row => row["Contact Id"]);
                             callback(null, contactIds);
                         },
                         error: function(err) {
+                          console.log("err");
                             callback(err, []);
                         }
                     });
