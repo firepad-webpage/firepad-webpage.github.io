@@ -100,6 +100,7 @@
                             console.log("here");
                             firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load Contact IDs.</p></div>');
                         } else {
+                          console.log("else");
                             console.log(contactIds); // Use the contactIds list here
 
                             const params = new URLSearchParams(window.location.search);
