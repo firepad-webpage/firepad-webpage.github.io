@@ -184,7 +184,7 @@
         function getContactIdList(callback) {
             fetch("contact.csv")
                 .then(response => {
-                  concole.log("csv fetch");
+                  console.log("csv fetch");
                     if (!response.ok) {
                         throw new Error(`Network response was not ok: ${response.statusText}`);
                     }
