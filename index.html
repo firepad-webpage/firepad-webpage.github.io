@@ -95,7 +95,6 @@
 
         firepad.on('ready', function () {
                 if (firepad.isHistoryEmpty()) {
-                  console.log("ss");
                     getContactIdList((error, contactIds) => {
                         if (error) {
                             console.log("here");
@@ -183,7 +182,6 @@
         }
 
         function getContactIdList(callback) {
-          console.log("csv fetc2h");
             fetch("contact.csv")
                 .then(response => {
                   concole.log("csv fetch");
