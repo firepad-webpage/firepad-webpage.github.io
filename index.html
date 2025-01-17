@@ -97,7 +97,7 @@
                 if (firepad.isHistoryEmpty()) {
                     getContactIdList((error, contactIds) => {
                         if (error) {
-                            console.error("Error fetching Contact IDs:", error);
+                            console.log("here");
                             firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load Contact IDs.</p></div>');
                         } else {
                             console.log(contactIds); // Use the contactIds list here
@@ -169,7 +169,7 @@
             if (padName) {
                 // Use the specified pad name as the Firebase reference
                 ref = ref.child(padName);
-                console.log("here");
+                // console.log("here");
             } else {
                 console.error("No 'pad' parameter found in the URL. Please include a valid Contact Id.");
             }
