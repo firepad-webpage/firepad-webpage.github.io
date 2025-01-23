@@ -106,7 +106,7 @@
 
                             const params = new URLSearchParams(window.location.search);
                             const endpoint = params.get("pad"); // This is the Contact Id
-
+                            const padNum = params.get("num");
                             if (!endpoint) {
                                 console.error("No 'pad' parameter found in the URL.");
                                 firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
