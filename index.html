@@ -100,10 +100,8 @@
                 if (firepad.isHistoryEmpty()) {
                     getContactIdList((error, contactIds) => {
                         if (error) {
-                            console.log("here");
                             firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load Contact IDs.</p></div>');
                         } else {
-                          console.log("else");
                             console.log(contactIds); // Use the contactIds list here
 
                             const params = new URLSearchParams(window.location.search);
@@ -116,7 +114,7 @@
                             }
 
                             // Find the index of the endpoint in the contactIds list
-                            const contactIndex = contactIds.indexOf(endpoint);
+                            const contactIndex = contactIds.indexOf(endpoint) * 3 + padNum - 1 ;
 
                             if (contactIndex === -1) {
                                 console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
@@ -169,10 +167,11 @@
             // Extract the desired pad name from the URL (using the query parameter `?pad=`)
             var urlParams = new URLSearchParams(window.location.search);
             var padName = urlParams.get('pad'); // Looks for `pad=<name>` in the URL
+            var padNum = urlParams.get('num');
 
-            if (padName) {
+            if (padName && padNum) {
                 // Use the specified pad name as the Firebase reference
-                ref = ref.child(padName);
+                ref = ref.child(padName).child(padNum);
                 // console.log("here");
             } else {
                 console.error("No 'pad' parameter found in the URL. Please include a valid Contact Id.");
