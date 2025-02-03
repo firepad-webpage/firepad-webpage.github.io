@@ -203,8 +203,10 @@
                 // Use the specified pad name as the Firebase reference
                 ref = ref.child(padName).child(padNum);
                 // console.log("here");
-            } else {
+            } else if (padName){
                 console.error("No 'pad' parameter found in the URL. Please include a valid Contact Id.");
+            } else if (padNum) {
+                console.error("No 'num' parameter found in the URL. Please include a valid Contact Id.");
             }
 
             if (typeof console !== 'undefined') {
