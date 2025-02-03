@@ -124,7 +124,7 @@
 
                             // pilot
 
-                            fetch("content_sample.txt")  
+                            fetch("content_sample.html")  
                             .then(response => {
                                 if (!response.ok) {
                                 throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -132,14 +132,8 @@
                                 return response.text(); // Convert the response to plain text
                             })
                             .then(textContent => {
-                                console.log("Fetched text content:", textContent);
-
-                                // Directly set the fetched text in Firepad
-                                firepad.setHtml(`
-                                <div class="article-container">
-                                    <pre>${textContent}</pre>
-                                </div>
-                                `);
+                                firepad.setHtml(textContent);
+                                
                             })
                             .catch(error => {
                                 console.error("Error fetching the TXT file:", error);
