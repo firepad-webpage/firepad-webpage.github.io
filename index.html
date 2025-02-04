@@ -62,51 +62,6 @@
 <body onload="init()">
     <!-- Instructions Area -->
     <div id="instructions">
-        <script>
-            function init(){
-                const urlParams = new URLSearchParams(window.location.search);
-                const padName = urlParams.get('pad');
-                const padNum = urlParams.get('num');
-                // setInstructions(padName, padNum);
-                fetch("content_sample.html")  
-                .then(response => {
-                    if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.statusText}`);
-                    }
-                    return response.text(); // Convert the response to plain text
-                })
-                .then(textContent => {
-                    instructionsEl.innerHTML = textContent;
-                    
-                });
-                // function setInstructions(padName, padNum) {
-                //     const instructionsEl = document.getElementById('instructions');
-                    
-                //     // If either parameter is missing, you could show a default message
-                //     if (!padName || !padNum) {
-                //         instructionsEl.innerHTML = "Welcome! Please specify a valid 'pad' and 'num' in the URL.";
-                //         return;
-                //     }
-
-                //     // Example: Hardcode different instructions for each padName + padNum
-                //     if (padName === 'CID_1fm9U6VUaVPLKjs' && padNum === '1') {
-                //         instructionsEl.innerHTML = `
-                //         <p><strong>Hello, user 1!</strong> Here are your instructions for the first item.</p>
-                //         `;
-                //     } else if (padName === 'CID_1fm9U6VUaVPLKjs' && padNum === '2') {
-                //         instructionsEl.innerHTML = `
-                //         <p><strong>Hello, user 2!</strong> Here are your instructions for the second item.</p>
-                //         `;
-                //     } else {
-                //         // Fallback if no specific case is matched
-                //         instructionsEl.innerHTML = `
-                //         <p>General instructions for ${padName}, with item #${padNum}.</p>
-                //         `;
-                //     }
-                // }
-
-            }
-        </script>
     </div>
 
     <!-- Firepad Container -->
@@ -114,6 +69,19 @@
 
     <script>
         function init() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const padName = urlParams.get('pad');
+            const padNum = urlParams.get('num');
+            setInstructions(padName, padNum);
+
+            function setInstructions(padName, padNum) {
+                const instructionsEl = document.getElementById('instructions');
+                fetch("content_sample.html")  
+                .then(textContent => {
+                    instructionsEl.innerHTML = textContent;
+                });
+            }
+
             //// Initialize Firebase.
             const firebaseConfig = {
                 apiKey: "AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo",
