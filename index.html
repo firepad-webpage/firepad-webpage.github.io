@@ -76,9 +76,15 @@
 
             function setInstructions(padName, padNum) {
                 const instructionsEl = document.getElementById('instructions');
-                fetch("content_sample.html")  
+                fetch("content_sample.html")
+                .then(response => {
+                    if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.text(); // Convert the response to plain text
+                })
                 .then(textContent => {
-                    instructionsEl.innerHTML = '<p>here</p>';
+                    instructionsEl.innerHTML = textContent;
                 });
                 
             }
