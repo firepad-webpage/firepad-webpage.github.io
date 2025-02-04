@@ -37,17 +37,18 @@
 
         /* Instructions Area */
         #instructions {
+            max-height: 150px;    /* or whatever you need */
+            overflow-y: auto;
             padding: 20px;
-            background-color:#f9f9f9;
+            background-color: #f9f9f9;
             border-bottom: 1px solid #ddd;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* Firepad Container */
         #firepad-container {
-            flex: 1; /* Take up remaining space */
+            flex: 1;        /* Take remaining vertical space */
             width: 100%;
-            height: 100%;
+            /* height: 100%; <-- remove or override this if it causes overflow issues */
+            overflow: hidden; /* Firepad typically manages its own scrolling */
         }
 
         /* Optional: Style the instructions text */
