@@ -73,22 +73,22 @@
             const urlParams = new URLSearchParams(window.location.search);
             const padName = urlParams.get('pad');
             const padNum = urlParams.get('num');
-            setInstructions(padName, padNum);
+            // setInstructions(padName, padNum);
 
-            function setInstructions(padName, padNum) {
-                const instructionsEl = document.getElementById('instructions');
-                fetch("content_sample.html")
-                .then(response => {
-                    if (!response.ok) {
-                    throw new Error(`Network response was not ok: ${response.statusText}`);
-                    }
-                    return response.text(); // Convert the response to plain text
-                })
-                .then(textContent => {
-                    instructionsEl.innerHTML = textContent;
-                });
+            // function setInstructions(padName, padNum) {
+            //     const instructionsEl = document.getElementById('instructions');
+            //     fetch("content_sample.html")
+            //     .then(response => {
+            //         if (!response.ok) {
+            //         throw new Error(`Network response was not ok: ${response.statusText}`);
+            //         }
+            //         return response.text(); // Convert the response to plain text
+            //     })
+            //     .then(textContent => {
+            //         instructionsEl.innerHTML = textContent;
+            //     });
                 
-            }
+            // }
 
             //// Initialize Firebase.
             const firebaseConfig = {
@@ -134,77 +134,60 @@
                             }
 
                             // Find the index of the endpoint in the contactIds list
-                            const contactIndex = contactIds.indexOf(endpoint) * 3 + padNum - 1 ;
+                            // const contactIndex = contactIds.indexOf(endpoint) * 3 + padNum - 1 ;
+                            const contactIndex = padNum - 1 ;
 
                             if (contactIndex === -1) {
                                 console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
                                 firepad.setHtml('<div class="article-container"><h1>Access Denied</h1><p>Invalid pad identifier.</p></div>');
                                 return;
                             }
-                            firepad.setHtml(`<div class="article-container">
-                                    <h1>Abstract:</h1>
-                                    <p>contents</p>
-                                </div>`);
 
-                            // pilot
 
-                            // fetch("content_sample.html")  
-                            // .then(response => {
-                            //     if (!response.ok) {
-                            //     throw new Error(`Network response was not ok: ${response.statusText}`);
-                            //     }
-                            //     return response.text(); // Convert the response to plain text
-                            // })
-                            // .then(textContent => {
-                            //     firepad.setHtml(`<div class="article-container">
-                            //         <h1>Abstract:</h1>
-                            //         <p>contents</p>
-                            //     </div>`);
-                                
-                            // })
-                            // .catch(error => {
-                            //     console.error("Error fetching the TXT file:", error);
-                            //     firepad.setHtml(`
-                            //     <div class="article-container">
-                            //         <h1>Error</h1>
-                            //         <p>Unable to load content from myfile.txt.</p>
-                            //     </div>
-                            //     `);
-                            // });
+
 
 
                             // Now, fetch the articles data
-                            // getArticlesList((error, articles) => {
-                            //     if (error) {
-                            //         console.error("Error fetching articles:", error);
-                            //         firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load articles.</p></div>');
-                            //         return;
-                            //     }
+                            getArticlesList((error, articles) => {
+                                if (error) {
+                                    console.error("Error fetching articles:", error);
+                                    firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load articles.</p></div>');
+                                    return;
+                                }
 
-                            //     console.log("Articles List:", articles);
+                                console.log("Articles List:", articles);
 
-                            //     // Ensure the contact index is within the articles array bounds
-                            //     if (contactIndex >= articles.length) {
-                            //         console.warn(`No article found for contact index: ${contactIndex}`);
-                            //         firepad.setHtml('<div class="article-container"><h1>Article Not Found</h1><p>No article available for this contact.</p></div>');
-                            //         return;
-                            //     }
+                                // Ensure the contact index is within the articles array bounds
+                                // if (contactIndex >= articles.length) {
+                                //     console.warn(`No article found for contact index: ${contactIndex}`);
+                                //     firepad.setHtml('<div class="article-container"><h1>Article Not Found</h1><p>No article available for this contact.</p></div>');
+                                //     return;
+                                // }
 
-                            //     // Get the corresponding article based on the contact index
-                            //     const articleData = articles[contactIndex];
+                                // Get the corresponding article based on the contact index
+                                const articleData = articles[contactIndex];
 
-                            //     if (!articleData || !articleData.abstract) {
-                            //         console.warn(`No abstract found for article at index: ${contactIndex}`);
-                            //         firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
-                            //         return;
-                            //     }
+                                if (!articleData || !articleData.abstract) {
+                                    console.warn(`No abstract found for article at index: ${contactIndex}`);
+                                    firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
+                                    return;
+                                }
+                                const instructionsEl = document.getElementById('instructions');
+                                fetch(articledata.html)
+                                .then(response => {
+                                    if (!response.ok) {
+                                    throw new Error(`Network response was not ok: ${response.statusText}`);
+                                    }
+                                    return response.text(); // Convert the response to plain text
+                                })
+                                .then(textContent => {
+                                    instructionsEl.innerHTML = textContent;
+                                });
+                                firepad.setHtml(generateHtml(articleData.article));
 
-                            //     // Populate Firepad with the abstract content
-                            //     firepad.setHtml(generateHtml(articleData.abstract, articleData.article));
-
-                            //     console.log("Endpoint:", endpoint);
-                            //     console.log("Current URL:", window.location.href);
-                            // });
+                                console.log("Endpoint:", endpoint);
+                                console.log("Current URL:", window.location.href);
+                            });
                         }
                     });
                 }
@@ -273,7 +256,7 @@
 
 
         function getArticlesList(callback) {
-            fetch("dataset100.csv")
+            fetch("contents.csv")
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -293,13 +276,13 @@
                           }
 
                           // Check for the required columns
-                          if (!results.meta.fields.includes("article") || !results.meta.fields.includes("abstract")) {
-                              throw new Error('"article" and/or "abstract" columns not found in the CSV header');
+                          if (!results.meta.fields.includes("html") || !results.meta.fields.includes("abstract")) {
+                              throw new Error('"html" and/or "abstract" columns not found in the CSV header');
                           }
 
                           // Extract articles with 'article' and 'abstract' fields
                           const articles = data.map(row => ({
-                              article: row.article.trim(), // Trim any extra spaces
+                              html: row.html.trim(), // Trim any extra spaces
                               abstract: row.abstract.trim()
                           }));
 
@@ -316,45 +299,9 @@
                   callback(error, []);
               });}
 
-            // pilot
-            function getSingleContent(callback) {
-                fetch("content_sample.txt")
-                    .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok: ${response.statusText}`);
-                    }
-                    return response.text(); // Convert to plain text
-                    })
-                    .then(textContent => {
-                    // Build an array of "articles" if your code expects multiple objects,
-                    // or just provide a single item if that's all you need.
-
-                    // Example 1: Single “article” object:
-                    const articles = [
-                        {
-                        article: textContent,    // The entire text is the "article" field
-                        abstract: ""             // or some placeholder if your code expects an 'abstract'
-                        }
-                    ];
-
-                    // Pass our array back to the callback
-                    callback(null, articles);
-                    })
-                    .catch(error => {
-                    console.error("Error fetching or reading the TXT file:", error);
-                    callback(error, []);
-                    });
-                }
-
-
-        
-
-
-        function generateHtml(abstract, article) {
+        function generateHtml(article) {
             return `
                 <span style="font-size: 36px;">Welcome User</span><br/><br/>
-                <span style="font-size: 24px;">Article:</span>
-                <span style="font-size: 12px;">${article}</span>
                 <br/>
                 <span style="font-size: 24px;">Abstract:</span>
                 <span style="font-size: 12px;">${abstract}</span>
