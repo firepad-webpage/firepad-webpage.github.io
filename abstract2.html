@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Preference Optimization</title>
+    <script type="text/javascript" async
+      src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<p>
+Language models (LMs) often optimize outputs for an "average" user, overlooking the diverse and sometimes conflicting preferences of different communities. Community Preference Optimization (COMPO) addresses this challenge by incorporating community-specific context into preference optimization, drawing inspiration from recommender systems. To enable this approach, the COMPRED dataset was introduced, containing over 1 million preference pairs from 187 subreddits across five domains, including science, finance, history, politics, and gender/sexuality. These preferences are inferred from Reddit’s post-comment structure, leveraging upvotes as a proxy for community endorsement. Experiments demonstrate that integrating subreddit context into reward models significantly improves preference prediction, especially in politically and culturally sensitive discussions. Evaluations using the Llama-2 7B model show that COMPO outperforms existing baselines in both automated and human assessments, particularly in domains where community-specific norms are pronounced. Human evaluation results highlight that COMPO-generated responses align more closely with subreddit-specific values, achieving a 46.5% preference rate over baselines. Further analysis reveals that explicit contextualization is most beneficial when subreddit predictability is low, suggesting a strategic approach to community-aware language modeling. These findings underscore the value of community-level preference modeling in improving language model personalization while preserving individual privacy.
+</p>
+
+</body>
+</html>
