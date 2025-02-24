@@ -114,7 +114,7 @@
 
             //// Create Firepad (with rich text toolbar and shortcuts enabled).
             var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
-                { richTextToolbar: true, richTextShortcuts: true });
+                { richTextToolbar: false, richTextShortcuts: true });
 
         firepad.on('ready', function () {
                 if (firepad.isHistoryEmpty()) {
@@ -183,7 +183,7 @@
                                 .then(textContent => {
                                     instructionsEl.innerHTML = textContent;
                                 });
-                                firepad.setHtml(generateHtml(articleData.abstract));
+                                firepad.setHtml(articleData.abstract);
 
                                 console.log("Endpoint:", endpoint);
                                 console.log("Current URL:", window.location.href);

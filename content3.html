@@ -1,29 +1,63 @@
-<p><strong>Relevant Content for Abstract Preparation</strong></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relevant Content for Abstract Preparation</title>
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js">
+    </script>
+</head>
+<body>
+    <h1>Please Read the Excerpt Below</h1>
 
-<h3 id="motivation-of-the-study">Motivation of the Study</h3>
-<p>Traditional secret sharing ensures that a secret can only be reconstructed by an authorized set of shares, but this assumes an adversary cannot eventually obtain such a set. This assumption is unrealistic over long periods with potential multiple breaches [p.1]. The study introduces secret sharing with certified deletion, leveraging quantum mechanics to allow users to verify the deletion of shares, ensuring privacy even if an adversary later obtains an authorized set [p.1].</p>
+    <h2 id="motivation-of-the-study">Motivation of the Study</h2>
+    <p>
+        Traditional secret sharing ensures that a secret can only be reconstructed by an authorized set of shares, 
+        but this assumes an adversary cannot eventually obtain such a set. This assumption is unrealistic over long periods 
+        with potential multiple breaches. The study introduces secret sharing with certified deletion, leveraging quantum mechanics 
+        to allow users to verify the deletion of shares, ensuring privacy even if an adversary later obtains an authorized set.
+    </p>
 
-<h3 id="background">Background</h3>
-<p>Certified deletion relies on quantum mechanics, where destructive measurements can erase useful information from quantum shares. The concept was first introduced by Broadbent and Islam (2020) for one-time-pad encryption. Bartusek and Khurana (2023) extended it to 2-out-of-2 secret sharing, but general secret sharing structures remained unaddressed [p.2].</p>
+    <h2 id="background">Background</h2>
+    <p>
+        Certified deletion relies on quantum mechanics, where destructive measurements can erase useful information from quantum shares. 
+        The concept was first introduced by Broadbent and Islam (2020) for one-time-pad encryption. Bartusek and Khurana (2023) extended it to 
+        2-out-of-2 secret sharing, but general secret sharing structures remained unaddressed.
+    </p>
 
-<h3 id="results">Results</h3>
+    <h2 id="results">Results</h2>
+    
+    <h3 id="two-security-definitions">Two Security Definitions</h3>
+    <p><strong>No-Signaling Security:</strong> Ensures privacy if non-communicating adversaries delete enough shares, even if the remaining shares form an authorized set.</p>
+    <p><strong>Adaptive Security:</strong> Protects against adversaries that adaptively corrupt and delete shares, provided the undeleted corrupted shares remain unauthorized.</p>
 
-<h4 id="two-security-definitions">Two Security Definitions</h4>
-<p><strong>No-Signaling Security:</strong> Ensures privacy if non-communicating adversaries delete enough shares, even if the remaining shares form an authorized set [p.3].</p>
-<p><strong>Adaptive Security:</strong> Protects against adversaries that adaptively corrupt and delete shares, provided the undeleted corrupted shares remain unauthorized [p.3].</p>
+    <h3 id="construction-of-certified-deletion-schemes">Construction of Certified Deletion Schemes</h3>
+    <p><strong>General Secret Sharing Scheme:</strong> A general secret sharing scheme with no-signaling certified deletion for any monotone access structure, using Bartusek and Khurana’s 2-out-of-2 scheme as a building block.</p>
+    <p><strong>Threshold Secret Sharing Scheme:</strong> A threshold secret sharing scheme with adaptive certified deletion, constructed from scratch using new technical ideas, including generalized XOR extractors and polynomial interpolation as a randomness extractor.</p>
 
-<h4 id="construction-of-certified-deletion-schemes">Construction of Certified Deletion Schemes</h4>
-<p><strong>General Secret Sharing Scheme:</strong> A general secret sharing scheme with no-signaling certified deletion for any monotone access structure, using Bartusek and Khurana’s 2-out-of-2 scheme as a building block [p.4].</p>
-<p><strong>Threshold Secret Sharing Scheme:</strong> A threshold secret sharing scheme with adaptive certified deletion, constructed from scratch using new technical ideas, including generalized XOR extractors and polynomial interpolation as a randomness extractor [p.5].</p>
+    <h3 id="high-rate-seedless-extractors">High-Rate Seedless Extractors</h3>
+    <p>
+        Developed new seedless extractors for quantum sources of entropy, improving the rate of extraction and enabling efficient certified deletion. 
+        These extractors work for both qubit and qudit registers and extend to finite fields, reducing the need for entanglement.
+    </p>
 
-<h4 id="high-rate-seedless-extractors">High-Rate Seedless Extractors</h4>
-<p>Developed new seedless extractors for quantum sources of entropy, improving the rate of extraction and enabling efficient certified deletion. These extractors work for both qubit and qudit registers and extend to finite fields, reducing the need for entanglement [p.6].</p>
+    <h3 id="efficient-share-deletion-and-verification">Efficient Share Deletion and Verification</h3>
+    <p>
+        Share deletion involves measuring in the Fourier basis and outputting the result as a deletion certificate, 
+        verifiable using pre-defined check positions in each share.
+    </p>
 
-<h4 id="efficient-share-deletion-and-verification">Efficient Share Deletion and Verification</h4>
-<p>Share deletion involves measuring in the Fourier basis and outputting the result as a deletion certificate, verifiable using pre-defined check positions in each share [p.7].</p>
+    <h3 id="proof-of-security">Proof of Security</h3>
+    <p>
+        Security proofs demonstrate negligible trace distance between the adversary’s view of different secrets after certified deletion, even under adaptive attacks. 
+        This involves a hybrid argument and cut-and-choose techniques to ensure that polynomial interpolation acts as an effective randomness extractor.
+    </p>
 
-<h4 id="proof-of-security">Proof of Security</h4>
-<p>Security proofs demonstrate negligible trace distance between the adversary’s view of different secrets after certified deletion, even under adaptive attacks. This involves a hybrid argument and cut-and-choose techniques to ensure that polynomial interpolation acts as an effective randomness extractor [p.8].</p>
-
-<h4 id="open-problems">Open Problems</h4>
-<p>The authors highlight future directions, including extending adaptive certified deletion to general access structures, unifying no-signaling and adaptive security, achieving publicly verifiable deletion certificates, and exploring other threshold primitives like threshold signatures [p.12].</p>
+    <h3 id="open-problems">Open Problems</h3>
+    <p>
+        The authors highlight future directions, including extending adaptive certified deletion to general access structures, unifying no-signaling and adaptive security, 
+        achieving publicly verifiable deletion certificates, and exploring other threshold primitives like threshold signatures.
+    </p>
+</body>
+</html>
