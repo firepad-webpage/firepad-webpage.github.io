@@ -9,73 +9,19 @@
     </script>
 </head>
 <body>
-    <h2>Please Read the Excerpt Below</h2>
 
-    <h2 id="community-preference-optimization-compo-">Community Preference Optimization (COMPO)</h2>
-    <p>
-        Language models often aggregate diverse and conflicting human feedback, leading to outputs optimized for a hypothetical "average" user. 
-        COMPO addresses this by personalizing preference optimization for language models (LMs) using contextual information about the preference 
-        provider, focusing on group-level preferences. This is inspired by recommender systems, aiming to generate outputs tailored to specific communities. 
-        To this end, the COMPRED dataset was introduced, which comprises community-level preferences extracted from Reddit, enabling personalization without 
-        individual privacy risks.
-    </p>
+    <h2>Motivation of the Study</h2>
+    <p>Metagenomic analysis suffers from significant data movement overhead because it requires accessing large amounts of low-reuse data.</p>
 
-    <h2 id="dataset-compred">Dataset: COMPRED</h2>
-    <p>
-        COMPRED includes over 1 million preference pairs across 187 subreddits, grouped into five domains:
-    </p>
-    <ul>
-        <li><strong>Science</strong>: Capturing divergences arising from topic specialization (e.g., /r/science vs. /r/StringTheory).</li>
-        <li><strong>Finance</strong>: Highlighting distinctions between subreddits focused on varying income brackets and investing goals.</li>
-        <li><strong>History</strong>: Addressing different norms for responses (e.g., /r/AskHistorians’ academic approach vs. /r/History).</li>
-        <li><strong>Politics</strong>: Divided by leanings, issues, or regional focus (e.g., /r/Conservative vs. /r/askliberal).</li>
-        <li><strong>Gender/Sexuality</strong>: Exploring intersections with other demographics and topics such as parenting and fashion.</li>
-    </ul>
-    <p>
-        The dataset uses Reddit’s post-comment structure, relying on upvotes as a proxy for community preferences. Preference pairs are created by comparing 
-        responses to identical prompts posted at different times, factoring in upvotes and post timings to avoid biases.
-    </p>
+    <h2>Background</h2>
+    <p><strong>Metagenomic workflow:</strong> Given a metagenomic sample, a typical workflow consists of three key steps: (i) sequencing, (ii) basecalling, and (iii) metagenomic analysis.</p>
+    <p>Due to its low reuse, the data needs to move all the way from the storage system to the main memory and processing units for its first use, and it will likely not be used again or reused very little during analysis.</p>
 
-    <h2 id="motivational-experiment">Motivational Experiment</h2>
-    <p>
-        To demonstrate the value of incorporating subreddit context, reward models were trained with and without community identifiers. Models trained with 
-        subreddit context achieved higher preference prediction accuracy, particularly in datasets like politics and gender, where community-specific preferences 
-        are pronounced. In contrast, conditioning on the wrong subreddit significantly reduced performance.
-    </p>
+    <h2>Results</h2>
+    <p>MegIS provides large average energy reductions of 5.4× and 1.9× compared to Kraken2 and Sieve, respectively, and 15.2× compared to accuracy-optimized Metalign.</p>
+    <p>MegIS achieves 1.5×–5.1× speedup compared to state-of-the-art metagenomic tools while maintaining high accuracy.</p>
+    <p>MegIS operates with a low area cost of 1.7% over the area of the three cores in an SSD controller.</p>
+    <p>MegIS uses the same 701 GB k-mer database and a 14 GB sketch database for MegIS’s KSS sketch database.</p>
 
-    <h2 id="main-experiments-compo">Main Experiments: COMPO</h2>
-    <p>
-        Using Llama-2 7B as the base model, COMPO was evaluated against baselines to assess the impact of contextualizing LMs with community identifiers:
-    </p>
-    <ul>
-        <li><strong>SFT-NC</strong>: Finetuning with no subreddit context.</li>
-        <li><strong>DPO</strong>: Direct preference optimization without subreddit context.</li>
-        <li><strong>SFT-C</strong>: Finetuning with subreddit context but no preference tuning.</li>
-    </ul>
-    <p>
-        COMPO consistently outperformed these baselines in both automated and human evaluations, with notable improvements in politically and culturally sensitive domains. 
-        Performance degraded when random subreddit identifiers were introduced, underscoring the importance of accurate contextualization.
-    </p>
-
-    <h2 id="human-evaluation">Human Evaluation</h2>
-    <p>
-        Human annotators evaluated the relevance of responses from COMPO and baseline models across eight subreddits. COMPO was preferred in 46.5% of cases, 
-        significantly outperforming baselines like DPO (37.1%). Annotators noted COMPO’s ability to generate responses aligned with subreddit-specific norms 
-        and values, especially in politically diverse and gender-related contexts.
-    </p>
-
-    <h2 id="analysis">Analysis</h2>
-    <p>
-        Further analysis revealed that subreddit context was most beneficial when subreddit predictability (via input text) was low, indicating the added value 
-        of explicit contextualization. High predictability reduced the advantage of community-specific tuning, suggesting opportunities for efficient resource 
-        allocation by routing predictable examples to generalist models.
-    </p>
-
-    <h2 id="conclusions">Conclusions</h2>
-    <p>
-        COMPO demonstrates the potential of personalized preference optimization for LMs by incorporating community-level context. The approach improves the 
-        relevance of model outputs to specific communities and introduces the COMPRED dataset for future research in personalized LMs. This work also highlights 
-        directions for addressing challenges like intra-community diversity, cold-start problems, and the risks of reinforcing echo chambers.
-    </p>
 </body>
 </html>
