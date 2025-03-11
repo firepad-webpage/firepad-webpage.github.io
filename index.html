@@ -121,7 +121,7 @@
                 { richTextToolbar: false, richTextShortcuts: true });
 
         firepad.on('ready', function () {
-                if (firepad.isHistoryEmpty()) {
+
                     getContactIdList((error, contactIds) => {
                         if (error) {
                             firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load Contact IDs.</p></div>');
@@ -201,7 +201,7 @@
                             });
                         }
                     });
-                }
+                
             });
         }
 
