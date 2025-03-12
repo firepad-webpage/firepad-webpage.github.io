@@ -190,7 +190,9 @@
                                 fetch(articleData.abstract)
                                 .then(response => response.text())
                                 .then(htmlContent => {
-                                    firepad.setHtml(htmlContent);
+                                    if (firepad.isHistoryEmpty()) {
+                                        firepad.setHtml(htmlContent);
+                                    }
                                 })
                                 .catch(error => {
                                     console.error("Error fetching HTML file:", error);
