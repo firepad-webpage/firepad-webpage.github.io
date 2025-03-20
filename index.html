@@ -51,10 +51,8 @@ html, body {
     /* Firepad takes the remaining 60% space */
     #firepad-container {
       flex: 1;            /* fill the rest of the height (60%) */
-      overflow: auto;     /* if Firepad content is very tall, scroll inside */
-      min-height: 0;      /* important in flex layouts so the child can shrink */
+      overflow: hidden;     /* if Firepad content is very tall, scroll inside */
       width: 100%;
-      box-sizing: border-box;
     }
 
 
