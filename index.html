@@ -30,7 +30,7 @@
         html,
         body {
             height: 100%;
-            height: auto;
+            /* height: auto; */
             margin: 0;
             font-family: Arial, sans-serif;
         }
@@ -38,6 +38,12 @@
         body {
             display: flex;
             flex-direction: column;
+        }
+
+        #page-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh; /* Full viewport height */
         }
 
         /* Instructions Area */
@@ -50,10 +56,9 @@
         }
 
         #firepad-container {
-            flex: 1;        /* Take remaining vertical space */
+            flex: 1 1 auto; /* Allow it to grow and shrink */
             width: 100%;
-            /* height: 100%; <-- remove or override this if it causes overflow issues */
-            overflow: hidden; /* Firepad typically manages its own scrolling */
+            overflow: hidden;
         }
 
         /* Optional: Style the instructions text */
