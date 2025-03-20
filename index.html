@@ -52,6 +52,22 @@ html,
       box-sizing: border-box;
     }
 
+#instructions::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;  /* fixed width for scrollbar track */
+}
+
+#instructions::-webkit-scrollbar-track {
+  background: #f0f0f0; /* track color */
+}
+
+#instructions::-webkit-scrollbar-thumb {
+  background-color: #bbb; /* scroll thumb color */
+  border-radius: 4px; 
+  /* you can also add a border or other styling */
+}
+
+
     /* Firepad takes the remaining 60% space */
     #firepad-container {
       flex: 1;            /* fill the rest of the height (60%) */
