@@ -47,7 +47,7 @@ html, body {
     }
 
     /* Firepad container just sits below instructions */
-    #firepad-richtext {
+    #firepad-container {
       width: 100%;
       /* If you want at least some visible area for Firepad even if instructions are huge: */
       min-height: 35vh; 
@@ -56,6 +56,15 @@ html, body {
          overflow: auto;
       */
     }
+
+
+#firepad-container .firepad,
+#firepad-container .firepad-richtext,
+#firepad-container .CodeMirror {
+  /* Force the nested elements to fill the container’s height */
+  height: 100% !important;
+  box-sizing: border-box;
+}
 
 
     </style>
