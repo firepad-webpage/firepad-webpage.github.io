@@ -40,31 +40,22 @@ html, body {
     /* A simple wrapper if you want to keep it, but it’s not necessary. */
 
     #instructions {
-      padding: 20px;
+      height: 40%;
+      overflow-y: scroll; /* scroll if content is too tall for 40% */
       background-color: #f9f9f9;
       border-bottom: 1px solid #ddd;
-      /* NO max-height. Let this grow as long as it needs. */
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    /* Firepad container just sits below instructions */
+    /* Firepad takes the remaining 60% space */
     #firepad-container {
+      flex: 1;            /* fill the rest of the height (60%) */
+      overflow: auto;     /* if Firepad content is very tall, scroll inside */
+      min-height: 0;      /* important in flex layouts so the child can shrink */
       width: 100%;
-      /* If you want at least some visible area for Firepad even if instructions are huge: */
-      min-height: 35vh; 
-      overflow: auto;
-      /* Typically, Firepad itself can grow as needed, or you can let it scroll within if you prefer: 
-         overflow: auto;
-      */
+      box-sizing: border-box;
     }
-
-
-#firepad-container .firepad,
-#firepad-container .firepad-richtext,
-#firepad-container .CodeMirror {
-  /* Force the nested elements to fill the container’s height */
-  height: 100% !important;
-  box-sizing: border-box;
-}
 
 
     </style>
