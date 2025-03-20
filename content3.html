@@ -11,70 +11,67 @@
 <body>
 
     <h2>Motivation of the Study</h2>
-    The Internet of Things (IoT) is pervasive in many domains such as healthcare, Industry 4.0, and smart cities.
+    <p>The Internet of Things (IoT) is pervasive in many domains such as healthcare, Industry 4.0, and smart cities.</p>
 
-These applications involve massive amounts of IoT devices distributed across many decentralized networks.
-
-Current Stream Processing Engines (SPEs) perform centralized window aggregation to process data from decentralized networks.
-
-To reduce network overhead and resource consumption, state-of-the-art approaches suggest decentralized aggregation.
-
-There are three issues in current stream processing: (i) decentralized window slicing, (ii) decentralized aggregation of count-based windows, and (iii) decentralized aggregation of windows with non-decomposable functions.
-
-To deal with the above limitations we propose three approaches.
-
-We design Desis, a stream processing system that efficiently processes concurrent windows in decentralized networks.
-
-We propose Deco that has three schemes and enables processing count-based with decentralized aggregation while output correct results.
-
-We introduce Dema that pushes down windows with non-decomposable functions close to data sources to calculate window aggregations decentralized.
-
-Our work aims to propose a stream processing system that can efficiently process concurrent windows with different window types and aggregation functions in decentralized networks.
-
-Desis is a stream processing system designed to process multi-queries in decentralized networks.
-
-Desis proposes an aggregation engine to share partial results between multiple windows with different window types and different aggregation functions.
-
-Desis can perform window slicing and share partial results on all nodes in the decentralized networks.
-
-Desis significantly outperforms all baselines and scales well.
-
-Desis can reduce over 99% network cost.
-
-Deco is a decentralized aggregation approach that enables the split of count-based windows in decentralized networks.
-
-To adapt to changing event rates and produce correct results, we propose Decomon.
-
-To reduce communication overhead, we propose Decosync a synchronized approach that uses predicted local window sizes instead of actual local window sizes.
-
-To further reduce communication overhead, we design Decoasync an asynchronous approach that moves the prediction from the root to local nodes.
-
-Decomon monitors the event rates and always produces correct results even if the event rates change significantly.
-
-Decosync and Decoasync predict window sizes and their predictions are verified in the verification step.
-
-The results show that Decoasync has the highest throughput and lowest network cost since it moves calculations from the root node to local nodes and only sends partial results and a few events via the internet.
-
-Dema is a decentralized approach designed to process windows with non-decomposable functions in decentralized networks.
-
-Dema currently only supports functions that require sorting, such as median and quantile.
-
-The core concept of Dema is similar to Deco, which involves multiple steps of coordination between local nodes and the root node.
-
-In this paper, we present three approaches to improve window aggregations in decentralized setups.
-
-We present Desis, a stream processing system that can efficiently process multiple queries in decentralized networks.
-
-Desis facilitates the sharing of partial results among overlapping windows with varying window types and aggregation functions.
-
-We also describe the Deco approaches, including three schemes, Decomon, Decosync, and Decoasync, which split count-based window aggregation in decentralized networks.
-
-Deco adapts to changing event rates and ensures correct results.
-
-Additionally, we introduce Dema, which allows decentralized aggregation to support non-decomposable functions.
-
-
-
+    <p>These applications involve massive amounts of IoT devices distributed across many decentralized networks.</p>
+    
+    <p>Current Stream Processing Engines (SPEs) perform centralized window aggregation to process data from decentralized networks.</p>
+    
+    <p>To reduce network overhead and resource consumption, state-of-the-art approaches suggest decentralized aggregation.</p>
+    
+    <p>There are three issues in current stream processing: (i) decentralized window slicing, (ii) decentralized aggregation of count-based windows, and (iii) decentralized aggregation of windows with non-decomposable functions.</p>
+    
+    <p>To deal with the above limitations we propose three approaches.</p>
+    
+    <p>We design Desis, a stream processing system that efficiently processes concurrent windows in decentralized networks.</p>
+    
+    <p>We propose Deco that has three schemes and enables processing count-based with decentralized aggregation while output correct results.</p>
+    
+    <p>We introduce Dema that pushes down windows with non-decomposable functions close to data sources to calculate window aggregations decentralized.</p>
+    
+    <p>Our work aims to propose a stream processing system that can efficiently process concurrent windows with different window types and aggregation functions in decentralized networks.</p>
+    
+    <p>Desis is a stream processing system designed to process multi-queries in decentralized networks.</p>
+    
+    <p>Desis proposes an aggregation engine to share partial results between multiple windows with different window types and different aggregation functions.</p>
+    
+    <p>Desis can perform window slicing and share partial results on all nodes in the decentralized networks.</p>
+    
+    <p>Desis significantly outperforms all baselines and scales well.</p>
+    
+    <p>Desis can reduce over 99% network cost.</p>
+    
+    <p>Deco is a decentralized aggregation approach that enables the split of count-based windows in decentralized networks.</p>
+    
+    <p>To adapt to changing event rates and produce correct results, we propose Decomon.</p>
+    
+    <p>To reduce communication overhead, we propose Decosync a synchronized approach that uses predicted local window sizes instead of actual local window sizes.</p>
+    
+    <p>To further reduce communication overhead, we design Decoasync an asynchronous approach that moves the prediction from the root to local nodes.</p>
+    
+    <p>Decomon monitors the event rates and always produces correct results even if the event rates change significantly.</p>
+    
+    <p>Decosync and Decoasync predict window sizes and their predictions are verified in the verification step.</p>
+    
+    <p>The results show that Decoasync has the highest throughput and lowest network cost since it moves calculations from the root node to local nodes and only sends partial results and a few events via the internet.</p>
+    
+    <p>Dema is a decentralized approach designed to process windows with non-decomposable functions in decentralized networks.</p>
+    
+    <p>Dema currently only supports functions that require sorting, such as median and quantile.</p>
+    
+    <p>The core concept of Dema is similar to Deco, which involves multiple steps of coordination between local nodes and the root node.</p>
+    
+    <p>In this paper, we present three approaches to improve window aggregations in decentralized setups.</p>
+    
+    <p>We present Desis, a stream processing system that can efficiently process multiple queries in decentralized networks.</p>
+    
+    <p>Desis facilitates the sharing of partial results among overlapping windows with varying window types and aggregation functions.</p>
+    
+    <p>We also describe the Deco approaches, including three schemes, Decomon, Decosync, and Decoasync, which split count-based window aggregation in decentralized networks.</p>
+    
+    <p>Deco adapts to changing event rates and ensures correct results.</p>
+    
+    <p>Additionally, we introduce Dema, which allows decentralized aggregation to support non-decomposable functions.</p>
 
 
 
