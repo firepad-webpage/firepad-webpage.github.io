@@ -29,13 +29,17 @@
     <style>
 
 
-html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      /* The body will simply expand as content grows,
-         so the browser automatically adds a scrollbar if needed. */
-    }
+html,
+        body {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+        }
 
     /* A simple wrapper if you want to keep it, but it’s not necessary. */
 
