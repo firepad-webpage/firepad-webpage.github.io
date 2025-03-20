@@ -27,42 +27,58 @@
 
 
     <style>
+
+
 html,
-body {
-  height: 100%;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-body {
-  display: flex;
-  flex-direction: column;
-  /* allow body to scroll if needed */
-  overflow: auto; 
-}
+    /* Use flex layout on the body, taking full viewport height */
+    body {
+      display: flex;
+      flex-direction: column;
+    }
 
-#page-wrapper {
-  display: flex;
-  flex-direction: column;
-  /* this will let #page-wrapper fill available height and scroll if content is long */
-  flex: 1 1 auto; 
-  overflow: auto;
-}
+    /* This wrapper will contain both the instructions and Firepad */
+    #page-wrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 1 1 0;     /* allows it to expand/shrink to fill leftover space */
+      min-height: 0;   /* important so child can shrink if needed */
+      overflow: hidden;/* or 'auto' if you want the entire area to scroll */
+    }
 
-/* instructions are static at the top */
-#instructions {
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ddd;
-  flex: 0 0 auto; /* does not grow/shrink */
-}
+    /* The instructions area at the top */
+    #instructions {
+      padding: 20px;
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #ddd;
 
-/* the firepad is the main flex area */
-#firepad-container {
-  flex: 1 1 auto;  /* expands to fill remaining space */
-  width: 100%;
-  overflow: auto;  /* allows scrolling inside firepad if needed */
-}
+      /* Limit how tall the instructions can get before it scrolls */
+      max-height: 150px;
+      overflow-y: auto;
+      flex: 0 0 auto; /* do not flex/grow; stay at "needed" height up to 150px */
+    }
+
+    /* The Firepad container gets the remaining space */
+    #firepad-container {
+      flex: 1 1 0;  /* fill the rest of the parent space */
+      min-height: 0;
+      overflow: auto; /* scroll if Firepad content overflows */
+      width: 100%;
+    }
+
+    /* Just to show a large amount of text for instructions */
+    #instructions p {
+      margin: 0;
+      font-size: 16px;
+      color: #333;
+    }
 
 
     </style>
