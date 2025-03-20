@@ -27,41 +27,43 @@
 
 
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
 
-        body {
-            display: flex;
-            flex-direction: column;
-        }
+body {
+  display: flex;
+  flex-direction: column;
+  /* allow body to scroll if needed */
+  overflow: auto; 
+}
 
-        #page-wrapper {
-            display: flex;
-            flex-direction: column;
-            max-height: 100%;
-            
-        }
+#page-wrapper {
+  display: flex;
+  flex-direction: column;
+  /* this will let #page-wrapper fill available height and scroll if content is long */
+  flex: 1 1 auto; 
+  overflow: auto;
+}
 
-        #instructions {
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #ddd;
-        }
+/* instructions are static at the top */
+#instructions {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+  flex: 0 0 auto; /* does not grow/shrink */
+}
 
-        #firepad-container {
-            flex: 1 1 auto;
-            width: 100%;
-            overflow: hidden;
-        }
+/* the firepad is the main flex area */
+#firepad-container {
+  flex: 1 1 auto;  /* expands to fill remaining space */
+  width: 100%;
+  overflow: auto;  /* allows scrolling inside firepad if needed */
+}
 
-        #instructions p {
-            margin: 0;
-            font-size: 16px;
-            color: #333;
-        }
 
     </style>
 </head>
