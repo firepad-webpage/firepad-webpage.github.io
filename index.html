@@ -29,55 +29,32 @@
     <style>
 
 
-html,
-    body {
+html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      box-sizing: border-box;
       font-family: Arial, sans-serif;
+      /* The body will simply expand as content grows,
+         so the browser automatically adds a scrollbar if needed. */
     }
 
-    /* Use flex layout on the body, taking full viewport height */
-    body {
-      display: flex;
-      flex-direction: column;
-    }
+    /* A simple wrapper if you want to keep it, but it’s not necessary. */
 
-    /* This wrapper will contain both the instructions and Firepad */
-    #page-wrapper {
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 0;     /* allows it to expand/shrink to fill leftover space */
-      min-height: 0;   /* important so child can shrink if needed */
-      overflow: hidden;/* or 'auto' if you want the entire area to scroll */
-    }
-
-    /* The instructions area at the top */
     #instructions {
       padding: 20px;
       background-color: #f9f9f9;
       border-bottom: 1px solid #ddd;
-
-      /* Limit how tall the instructions can get before it scrolls */
-      max-height: 150px;
-      overflow-y: auto;
-      flex: 0 0 auto; /* do not flex/grow; stay at "needed" height up to 150px */
+      /* NO max-height. Let this grow as long as it needs. */
     }
 
-    /* The Firepad container gets the remaining space */
+    /* Firepad container just sits below instructions */
     #firepad-container {
-      flex: 1 1 0;  /* fill the rest of the parent space */
-      min-height: 0;
-      overflow: auto; /* scroll if Firepad content overflows */
       width: 100%;
-    }
-
-    /* Just to show a large amount of text for instructions */
-    #instructions p {
-      margin: 0;
-      font-size: 16px;
-      color: #333;
+      /* If you want at least some visible area for Firepad even if instructions are huge: */
+      /* min-height: 400px;  */
+      overflow: auto;
+      /* Typically, Firepad itself can grow as needed, or you can let it scroll within if you prefer: 
+         overflow: auto;
+      */
     }
 
 
