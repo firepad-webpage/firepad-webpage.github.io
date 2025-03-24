@@ -123,11 +123,11 @@ html,
                         return;
                     }
 
-                    if (contactIndex === -1) {
-                        console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
-                        firepad.setHtml('<div class="article-container"><h1>Access Denied</h1><p>Invalid pad identifier.</p></div>');
-                        return;
-                    }
+                    // if (contactIndex === -1) {
+                    //     console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
+                    //     firepad.setHtml('<div class="article-container"><h1>Access Denied</h1><p>Invalid pad identifier.</p></div>');
+                    //     return;
+                    // }
                     
                     getArticlesList((error, articles) => {
                         if (error) {
@@ -140,7 +140,7 @@ html,
                         const articleData = articles.find(article => article.contactId === endpoint);
 
                         if (!articleData || !articleData.abstract) {
-                            console.warn(`No abstract found for article at index: ${contactIndex}`);
+                            console.warn(`No abstract found for article at: ${endpoint}`);
                             firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
                             return;
                         }
