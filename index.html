@@ -28,51 +28,45 @@
 
     <style>
 
-
 html,
-        body {
-            height: 100%;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
 
-        body {
-            display: flex;
-            flex-direction: column;
-        }
+    /* Make the body a flex container in a row */
+    body {
+      display: flex;
+      flex-direction: row; /* side by side horizontally */
+    }
 
-    /* A simple wrapper if you want to keep it, but it’s not necessary. */
-
+    /* Instructions section */
     #instructions {
-      height: 40%;
-      overflow-y: scroll; /* scroll if content is too tall for 40% */
+      width: 40%;        /* or any fixed width or flexible approach you prefer */
+      overflow-y: scroll;
       background-color: #f9f9f9;
-      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd; /* side-by-side border */
       padding: 20px;
       box-sizing: border-box;
     }
 
-#instructions::-webkit-scrollbar {
-  -webkit-appearance: none;
-  width: 8px;  /* fixed width for scrollbar track */
-}
+    #instructions::-webkit-scrollbar {
+      -webkit-appearance: none;
+      width: 8px;  /* fixed width for scrollbar track */
+    }
+    #instructions::-webkit-scrollbar-track {
+      background: #f0f0f0; /* track color */
+    }
+    #instructions::-webkit-scrollbar-thumb {
+      background-color: #bbb; /* scroll thumb color */
+      border-radius: 4px;
+    }
 
-#instructions::-webkit-scrollbar-track {
-  background: #f0f0f0; /* track color */
-}
-
-#instructions::-webkit-scrollbar-thumb {
-  background-color: #bbb; /* scroll thumb color */
-  border-radius: 4px; 
-  /* you can also add a border or other styling */
-}
-
-
-    /* Firepad takes the remaining 60% space */
+    /* Firepad container takes the remaining space */
     #firepad-container {
-      flex: 1;            /* fill the rest of the height (60%) */
-      overflow: hidden;     /* if Firepad content is very tall, scroll inside */
-      width: 100%;
+      flex: 1;        /* automatically grow to fill remaining width */
+      overflow: hidden;
     }
 
 
@@ -92,24 +86,7 @@ html,
             const urlParams = new URLSearchParams(window.location.search);
             const padName = urlParams.get('pad');
             const padNum = urlParams.get('num');
-            // setInstructions(padName, padNum);
 
-            // function setInstructions(padName, padNum) {
-            //     const instructionsEl = document.getElementById('instructions');
-            //     fetch("content_sample.html")
-            //     .then(response => {
-            //         if (!response.ok) {
-            //         throw new Error(`Network response was not ok: ${response.statusText}`);
-            //         }
-            //         return response.text(); // Convert the response to plain text
-            //     })
-            //     .then(textContent => {
-            //         instructionsEl.innerHTML = textContent;
-            //     });
-                
-            // }
-
-            //// Initialize Firebase.
             const firebaseConfig = {
                 apiKey: "AIzaSyCrINhKPoFzp-uA3zh1gYHF-_rtPrJStvo",
                 authDomain: "firepad-web.firebaseapp.com",
@@ -122,105 +99,100 @@ html,
             };
 
             const app = firebase.initializeApp(firebaseConfig);
-            //   const analytics = getAnalytics(app);
-            //// Get Firebase Database reference.
             var firepadRef = getExampleRef();
 
-            //// Create CodeMirror (with lineWrapping on).
             var codeMirror = CodeMirror(document.getElementById('firepad-container'), {
                 lineWrapping: true
             });
 
-            //// Create Firepad (with rich text toolbar and shortcuts enabled).
             var firepad = Firepad.fromCodeMirror(firepadRef, codeMirror,
                 { richTextToolbar: false, richTextShortcuts: true });
 
         firepad.on('ready', function () {
+            // getContactIdList((error, contactIds) => {
+            //     if (error) {
+            //         firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load Contact IDs.</p></div>');
+            //     } else {
+            //         console.log(contactIds); // Use the contactIds list here
+                    const params = new URLSearchParams(window.location.search);
+                    const endpoint = params.get("pad"); // This is the Contact Id
+                    const padNum = params.get("num");
+                    if (!endpoint) {
+                        console.error("No 'pad' parameter found in the URL.");
+                        firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
+                        return;
+                    }
 
-                    getContactIdList((error, contactIds) => {
+                    if (contactIndex === -1) {
+                        console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
+                        firepad.setHtml('<div class="article-container"><h1>Access Denied</h1><p>Invalid pad identifier.</p></div>');
+                        return;
+                    }
+                    
+                    getArticlesList((error, articles) => {
                         if (error) {
-                            firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load Contact IDs.</p></div>');
-                        } else {
-                            console.log(contactIds); // Use the contactIds list here
-
-                            const params = new URLSearchParams(window.location.search);
-                            const endpoint = params.get("pad"); // This is the Contact Id
-                            const padNum = params.get("num");
-                            if (!endpoint) {
-                                console.error("No 'pad' parameter found in the URL.");
-                                firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
-                                return;
-                            }
-
-                            // Find the index of the endpoint in the contactIds list
-                            // const contactIndex = contactIds.indexOf(endpoint) * 3 + padNum - 1 ;
-                            const contactIndex = padNum - 1 ;
-
-                            if (contactIndex === -1) {
-                                console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
-                                firepad.setHtml('<div class="article-container"><h1>Access Denied</h1><p>Invalid pad identifier.</p></div>');
-                                return;
-                            }
-
-
-
-
-
-                            // Now, fetch the articles data
-                            getArticlesList((error, articles) => {
-                                if (error) {
-                                    console.error("Error fetching articles:", error);
-                                    firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load articles.</p></div>');
-                                    return;
-                                }
-
-                                console.log("Articles List:", articles);
-
-                                // Ensure the contact index is within the articles array bounds
-                                // if (contactIndex >= articles.length) {
-                                //     console.warn(`No article found for contact index: ${contactIndex}`);
-                                //     firepad.setHtml('<div class="article-container"><h1>Article Not Found</h1><p>No article available for this contact.</p></div>');
-                                //     return;
-                                // }
-
-                                // Get the corresponding article based on the contact index
-                                const articleData = articles[contactIndex];
-
-                                if (!articleData || !articleData.abstract) {
-                                    console.warn(`No abstract found for article at index: ${contactIndex}`);
-                                    firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
-                                    return;
-                                }
-                                const instructionsEl = document.getElementById('instructions');
-                                fetch(articleData.html)
-                                .then(response => {
-                                    if (!response.ok) {
-                                    throw new Error(`Network response was not ok: ${response.statusText}`);
-                                    }
-                                    return response.text(); // Convert the response to plain text
-                                })
-                                .then(textContent => {
-                                    instructionsEl.innerHTML = textContent;
-                                });
-                                fetch(articleData.abstract)
-                                .then(response => response.text())
-                                .then(htmlContent => {
-                                    if (firepad.isHistoryEmpty()) {
-                                        firepad.setHtml(htmlContent);
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error("Error fetching HTML file:", error);
-                                });
-
-                                console.log("Endpoint:", endpoint);
-                                console.log("Current URL:", window.location.href);
-                            });
+                            console.error("Error fetching articles:", error);
+                            firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load articles.</p></div>');
+                            return;
                         }
+
+                        console.log("Articles List:", articles);
+                        const articleData = articles.find(article => article.contactId === endpoint);
+
+                        if (!articleData || !articleData.abstract) {
+                            console.warn(`No abstract found for article at index: ${contactIndex}`);
+                            firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
+                            return;
+                        }
+                        
+                        const instructionsFile = articleData[`html${padNum}`];
+                        const firepadFile = articleData[`abstract${padNum}`];
+
+                        if (!instructionsFile || !firepadFile) {
+                            console.warn(`Missing files for padNum=${padNum}. instructionsFile=${instructionsFile}, firepadFile=${firepadFile}`);
+                            firepad.setHtml('<div class="article-container"><h1>Files Missing</h1><p>Unable to find matching HTML files.</p></div>');
+                            return;
+                        }
+
+                        const instructionsEl = document.getElementById('instructions');
+                        fetch("content/" + instructionsFile)
+                            .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Could not load ${instructionsFile}: ${response.statusText}`);
+                            }
+                            return response.text();
+                            })
+                            .then(instructionsContent => {
+                            instructionsEl.innerHTML = instructionsContent;
+                            })
+                            .catch(error => {
+                            console.error("Error loading instructions file:", error);
+                        });
+
+                        fetch("abstract/" + firepadFile)
+                            .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Could not load ${firepadFile}: ${response.statusText}`);
+                            }
+                            return response.text();
+                            })
+                            .then(content => {
+                            // Only set if still empty so you don't overwrite existing history
+                            if (firepad.isHistoryEmpty()) {
+                                firepad.setHtml(content);
+                            }
+                            })
+                            .catch(error => {
+                            console.error("Error loading Firepad file:", error);
+                        });
+                        console.log("Endpoint:", endpoint);
+                        console.log("Current URL:", window.location.href);
                     });
+                });
+    //         });
                 
-            });
-        }
+    //     });
+    }
 
         function getExampleRef() {
             // Get the Firebase database reference
@@ -247,40 +219,40 @@ html,
             return ref;
         }
 
-        function getContactIdList(callback) {
-            fetch("contact.csv")
-                .then(response => {
-                  console.log("csv fetch");
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok: ${response.statusText}`);
-                    }
-                    return response.text();
-                })
-                .then(csvText => {
-                  console.log("CSV Content:", csvText); 
-                    Papa.parse(csvText, {
-                        header: true, 
-                        skipEmptyLines: true,
-                        complete: function(results) {
-                            if (!results.meta.fields.includes("Contact Id")) {
-                                callback(new Error('"Contact Id" column not found'), []);
-                                console.log("parseif");
-                                return;
-                            }
-                            const contactIds = results.data.map(row => row["Contact Id"]);
-                            callback(null, contactIds);
-                        },
-                        error: function(err) {
-                          console.log("err");
-                            callback(err, []);
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error("Error fetching the CSV file:", error);
-                    callback(error, []);
-                });
-        }
+        // function getContactIdList(callback) {
+        //     fetch("contact.csv")
+        //         .then(response => {
+        //           console.log("csv fetch");
+        //             if (!response.ok) {
+        //                 throw new Error(`Network response was not ok: ${response.statusText}`);
+        //             }
+        //             return response.text();
+        //         })
+        //         .then(csvText => {
+        //           console.log("CSV Content:", csvText); 
+        //             Papa.parse(csvText, {
+        //                 header: true, 
+        //                 skipEmptyLines: true,
+        //                 complete: function(results) {
+        //                     if (!results.meta.fields.includes("Contact Id")) {
+        //                         callback(new Error('"Contact Id" column not found'), []);
+        //                         console.log("parseif");
+        //                         return;
+        //                     }
+        //                     const contactIds = results.data.map(row => row["Contact Id"]);
+        //                     callback(null, contactIds);
+        //                 },
+        //                 error: function(err) {
+        //                   console.log("err");
+        //                     callback(err, []);
+        //                 }
+        //             });
+        //         })
+        //         .catch(error => {
+        //             console.error("Error fetching the CSV file:", error);
+        //             callback(error, []);
+        //         });
+        // }
 
 
         function getArticlesList(callback) {
@@ -310,8 +282,13 @@ html,
 
                           // Extract articles with 'article' and 'abstract' fields
                           const articles = data.map(row => ({
-                              html: row.html.trim(), // Trim any extra spaces
-                              abstract: row.abstract.trim()
+                              contactId: row.contactId.trim(),
+                              html1: row.html1.trim(), 
+                              abstract1: row.abstract1.trim(),
+                              html2: row.html2.trim(), // Trim any extra spaces
+                              abstract2: row.abstract2.trim(),
+                              html3: row.html3.trim(), // Trim any extra spaces
+                              abstract3: row.abstract3.trim()
                           }));
 
                           callback(null, articles); // Pass articles to the callback
@@ -327,14 +304,6 @@ html,
                   callback(error, []);
               });}
 
-        function generateHtml(abstract) {
-            return `
-                <span style="font-size: 36px;">Welcome User</span><br/><br/>
-                <br/>
-                <span style="font-size: 24px;">Abstract:</span>
-                <span style="font-size: 12px;">${abstract}</span>
-            `;
-        }
     </script>
 </body>
 
