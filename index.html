@@ -139,11 +139,11 @@ html,
                         console.log("Articles List:", articles);
                         const articleData = articles.find(article => article.contactId === endpoint);
 
-                        if (!articleData || !articleData.abstract) {
-                            console.warn(`No abstract found for article at: ${endpoint}`);
-                            firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
-                            return;
-                        }
+                        // if (!articleData || !articleData.abstract) {
+                        //     console.warn(`No abstract found for article at: ${endpoint}`);
+                        //     firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
+                        //     return;
+                        // }
                         
                         const instructionsFile = articleData[`html${padNum}`];
                         const firepadFile = articleData[`abstract${padNum}`];
