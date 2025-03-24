@@ -276,8 +276,11 @@ html,
                           }
 
                           // Check for the required columns
-                          if (!results.meta.fields.includes("html") || !results.meta.fields.includes("abstract")) {
+                          if (!results.meta.fields.includes("html1") || !results.meta.fields.includes("abstract1")) {
                               throw new Error('"html" and/or "abstract" columns not found in the CSV header');
+                          }
+                          if (!results.meta.fields.includes("contactId")) {
+                              throw new Error('contactId column not found in the CSV header');
                           }
 
                           // Extract articles with 'article' and 'abstract' fields
