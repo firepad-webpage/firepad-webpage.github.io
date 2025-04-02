@@ -200,6 +200,16 @@ html,
                         console.log("Current URL:", window.location.href);
                     });
                 });
+
+                document.addEventListener('copy', function(e) {
+        e.preventDefault();
+      });
+      document.addEventListener('paste', function(e) {
+        e.preventDefault();
+      });
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
     //         });
                 
     //     });
