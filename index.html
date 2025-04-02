@@ -73,12 +73,7 @@ html,
       overflow: hidden;
     }
 
-    .CodeMirror, .CodeMirror * {
-      user-select: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-    }
+
 
 
     </style>
@@ -201,15 +196,15 @@ html,
                     });
                 });
 
-    //             document.addEventListener('copy', function(e) {
-    //     e.preventDefault();
-    //   });
-    //   document.addEventListener('paste', function(e) {
-    //     e.preventDefault();
-    //   });
-    //   document.addEventListener('contextmenu', function(e) {
-    //     e.preventDefault();
-    //   });
+                document.addEventListener('copy', function(e) {
+        e.preventDefault();
+      });
+      document.addEventListener('paste', function(e) {
+        e.preventDefault();
+      });
+      document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+      });
     //         });
                 
     //     });
