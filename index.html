@@ -143,7 +143,7 @@ html,
                         }
 
                         console.log("Articles List:", articles);
-                        const articleData = articles.find(article => article.contactId === endpoint);
+                        const articleData = articles.find(article => article.contactId === endpoint) || articles[0];;
 
                         // if (!articleData || !articleData.abstract) {
                         //     console.warn(`No abstract found for article at: ${endpoint}`);
