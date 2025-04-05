@@ -121,8 +121,8 @@ html,
             //     } else {
             //         console.log(contactIds); // Use the contactIds list here
                     const params = new URLSearchParams(window.location.search);
-                    const endpoint = params.get("pad"); // This is the Contact Id
-                    const padNum = params.get("num");
+                    const endpoint = params.get("pad") || "default"; // fallback Contact Id
+                    const padNum = params.get("num") || "1";  
                     // if (!endpoint) {
                     //     console.error("No 'pad' parameter found in the URL.");
                     //     firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
@@ -143,7 +143,7 @@ html,
                         }
 
                         console.log("Articles List:", articles);
-                        const articleData = endpoint ? articles.find(article => article.contactId === endpoint) || articles[0] : articles[0];
+                        const articleData = articles.find(article => article.contactId === endpoint) || articles[0];
                         
 
                         // if (!articleData || !articleData.abstract) {
