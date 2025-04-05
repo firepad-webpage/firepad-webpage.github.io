@@ -123,11 +123,11 @@ html,
                     const params = new URLSearchParams(window.location.search);
                     const endpoint = params.get("pad"); // This is the Contact Id
                     const padNum = params.get("num");
-                    if (!endpoint) {
-                        console.error("No 'pad' parameter found in the URL.");
-                        firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
-                        return;
-                    }
+                    // if (!endpoint) {
+                    //     console.error("No 'pad' parameter found in the URL.");
+                    //     firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
+                    //     return;
+                    // }
 
                     // if (contactIndex === -1) {
                     //     console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
@@ -143,7 +143,8 @@ html,
                         }
 
                         console.log("Articles List:", articles);
-                        const articleData = articles.find(article => article.contactId === endpoint) || articles[0];
+                        const articleData = endpoint ? articles.find(article => article.contactId === endpoint) || articles[0] : articles[0];
+                        
 
                         // if (!articleData || !articleData.abstract) {
                         //     console.warn(`No abstract found for article at: ${endpoint}`);
@@ -222,12 +223,16 @@ html,
             if (padName && padNum) {
                 // Use the specified pad name as the Firebase reference
                 ref = ref.child(padName).child(padNum);
-                // console.log("here");
-            } else if (padName){
-                console.error("No 'pad' parameter found in the URL. Please include a valid Contact Id.");
-            } else if (padNum) {
-                console.error("No 'num' parameter found in the URL. Please include a valid Contact Id.");
+            } else {
+                ref = ref.child('default').child('1');
+                console.warn("Missing 'pad' or 'num' in URL. Using default Firebase reference: /default/1");
             }
+                // console.log("here");
+            // } else if (padName){
+            //     console.error("No 'pad' parameter found in the URL. Please include a valid Contact Id.");
+            // } else if (padNum) {
+            //     console.error("No 'num' parameter found in the URL. Please include a valid Contact Id.");
+            // }
 
             if (typeof console !== 'undefined') {
                 console.log('Firebase data: ', ref.toString());
