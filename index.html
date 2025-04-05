@@ -185,7 +185,7 @@ html,
                             })
                             .then(content => {
                             // Only set if still empty so you don't overwrite existing history
-                            if (firepad.isHistoryEmpty()) {
+                            if (firepad.isHistoryEmpty() ||  endpoint != "default") {
                                 firepad.setHtml(content);
                             }
                             })
