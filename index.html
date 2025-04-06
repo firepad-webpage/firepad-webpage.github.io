@@ -123,9 +123,9 @@ html,
                     const params = new URLSearchParams(window.location.search);
                     const endpoint = params.get("pad") || "default"; // fallback Contact Id
                     const padNum = params.get("num") || "1";  
-                    // if (endpoint == "") {
-                    //     endpoint = "default";
-                    // }
+                    if (endpoint == "") {
+                        endpoint = "default";
+                    }
                     // if (!endpoint) {
                     //     console.error("No 'pad' parameter found in the URL.");
                     //     firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
