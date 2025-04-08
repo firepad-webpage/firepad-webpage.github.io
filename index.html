@@ -122,6 +122,9 @@ html,
                 const version = params.get("version") || "0";
                 const pad = params.get("pad") || "default";
                 const padNum = params.get("num") || "1";
+                if (pad === "") {
+                    pad = "default";
+                }
 
                 getArticlesList((error, articlesMap) => {
                     if (error) {
