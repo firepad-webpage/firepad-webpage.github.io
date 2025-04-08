@@ -203,9 +203,11 @@ html,
             if (padName && padNum) {
                 // Use the specified pad name as the Firebase reference
                 ref = ref.child(padName).child(padNum);
-            } else {
+            } else if (padNum){
                 ref = ref.child('default').child('1');
-                console.warn("Missing 'pad' or 'num' in URL. Using default Firebase reference: /default/1");
+                console.warn("Missing 'pad' in URL. Using default Firebase reference: /default/1");
+            } else {
+                console.warn("Missing 'pad' and 'num' in URL. Using default Firebase reference: /default/1");
             }
 
 
