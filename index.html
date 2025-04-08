@@ -173,7 +173,7 @@ html,
                             return response.text();
                         })
                         .then(content => {
-                            if (firepad.isHistoryEmpty() || pad === "default") {
+                            if (firepad.isHistoryEmpty()) {
                                 firepad.setHtml(content);
                             }
                         })
@@ -198,6 +198,9 @@ html,
             // Extract the desired pad name from the URL (using the query parameter `?pad=`)
             var urlParams = new URLSearchParams(window.location.search);
             var padName = urlParams.get('pad'); // Looks for `pad=<name>` in the URL
+            if (!padName || padName.trim() === "") {
+                padName = "default";
+}
             var padNum = urlParams.get('num');
 
             if (padName && padNum) {
