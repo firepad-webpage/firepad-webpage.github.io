@@ -115,94 +115,80 @@ html,
                 { richTextToolbar: false, richTextShortcuts: true });
 
         firepad.on('ready', function () {
-            // getContactIdList((error, contactIds) => {
-            //     if (error) {
-            //         firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load Contact IDs.</p></div>');
-            //     } else {
-            //         console.log(contactIds); // Use the contactIds list here
-                    const params = new URLSearchParams(window.location.search);
-                    const endpoint = params.get("pad") || "default"; // fallback Contact Id
-                    const padNum = params.get("num") || "1";  
-                    if (endpoint == "") {
-                        endpoint = "default";
+
+                
+
+                const params = new URLSearchParams(window.location.search);
+                const version = params.get("version") || "0";
+                const pad = params.get("pad") || "default";
+                const padNum = params.get("num") || "1";
+                if (pad === "") {
+                    pad = "default";
+                }
+
+                getArticlesList((error, articlesMap) => {
+                    if (error) {
+                        console.error("Error fetching articles:", error);
+                        firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load articles.</p></div>');
+                        return;
                     }
-                    // if (!endpoint) {
-                    //     console.error("No 'pad' parameter found in the URL.");
-                    //     firepad.setHtml('<div class="article-container"><h1>Invalid Request</h1><p>No pad specified.</p></div>');
-                    //     return;
-                    // }
 
-                    // if (contactIndex === -1) {
-                    //     console.error("Invalid 'pad' parameter. Not found in Contact IDs.");
-                    //     firepad.setHtml('<div class="article-container"><h1>Access Denied</h1><p>Invalid pad identifier.</p></div>');
-                    //     return;
-                    // }
-                    
-                    getArticlesList((error, articles) => {
-                        if (error) {
-                            console.error("Error fetching articles:", error);
-                            firepad.setHtml('<div class="article-container"><h1>Error</h1><p>Unable to load articles.</p></div>');
-                            return;
-                        }
+                    const articleData = articlesMap[version];
 
-                        console.log("Articles List:", articles);
-                        const articleData = articles.find(article => article.contactId === endpoint) || articles[0];
-                        
+                    if (!articleData) {
+                        console.warn(`No content found for version=${version}`);
+                        firepad.setHtml('<div class="article-container"><h1>Invalid Version</h1><p>No matching version found in CSV.</p></div>');
+                        return;
+                    }
 
-                        // if (!articleData || !articleData.abstract) {
-                        //     console.warn(`No abstract found for article at: ${endpoint}`);
-                        //     firepad.setHtml('<div class="article-container"><h1>Content Not Available</h1><p>The abstract for this article is missing.</p></div>');
-                        //     return;
-                        // }
-                        
-                        const instructionsFile = articleData[`html${padNum}`];
-                        const firepadFile = articleData[`abstract${padNum}`];
+                    const instructionsFile = articleData[`html${padNum}`];
+                    const firepadFile = articleData[`abstract${padNum}`];
 
-                        if (!instructionsFile || !firepadFile) {
-                            console.warn(`Missing files for padNum=${padNum}. instructionsFile=${instructionsFile}, firepadFile=${firepadFile}`);
-                            firepad.setHtml('<div class="article-container"><h1>Files Missing</h1><p>Unable to find matching HTML files.</p></div>');
-                            return;
-                        }
+                    if (!instructionsFile || !firepadFile) {
+                        console.warn(`Missing files for padNum=${padNum}. instructionsFile=${instructionsFile}, firepadFile=${firepadFile}`);
+                        firepad.setHtml('<div class="article-container"><h1>Files Missing</h1><p>Unable to find matching HTML files.</p></div>');
+                        return;
+                    }
 
-                        const instructionsEl = document.getElementById('instructions');
-                        fetch("content/" + instructionsFile)
-                            .then(response => {
+                    const instructionsEl = document.getElementById('instructions');
+                    fetch("content/" + instructionsFile)
+                        .then(response => {
                             if (!response.ok) {
                                 throw new Error(`Could not load ${instructionsFile}: ${response.statusText}`);
                             }
                             return response.text();
-                            })
-                            .then(instructionsContent => {
+                        })
+                        .then(instructionsContent => {
                             instructionsEl.innerHTML = instructionsContent;
-                            })
-                            .catch(error => {
+                        })
+                        .catch(error => {
                             console.error("Error loading instructions file:", error);
                         });
 
-                        fetch("abstract/" + firepadFile)
-                            .then(response => {
+                    fetch("abstract/" + firepadFile)
+                        .then(response => {
                             if (!response.ok) {
                                 throw new Error(`Could not load ${firepadFile}: ${response.statusText}`);
                             }
                             return response.text();
-                            })
-                            .then(content => {
-                            // Only set if still empty so you don't overwrite existing history
-                            if (firepad.isHistoryEmpty() ||  endpoint == "default") {
+                        })
+                        .then(content => {
+                            if (firepad.isHistoryEmpty()) {
                                 firepad.setHtml(content);
                             }
-                            })
-                            .catch(error => {
+                        })
+                        .catch(error => {
                             console.error("Error loading Firepad file:", error);
                         });
-                        console.log("Endpoint:", endpoint);
-                        console.log("Current URL:", window.location.href);
-                    });
-                });
 
-    //         });
-                
-    //     });
+                    console.log("Version:", version);
+                    console.log("Pad:", pad);
+                    console.log("PadNum:", padNum);
+                    console.log("Current URL:", window.location.href);
+                });
+            });
+
+
     }
 
         function getExampleRef() {
@@ -212,21 +198,21 @@ html,
             // Extract the desired pad name from the URL (using the query parameter `?pad=`)
             var urlParams = new URLSearchParams(window.location.search);
             var padName = urlParams.get('pad'); // Looks for `pad=<name>` in the URL
+            if (!padName || padName.trim() === "") {
+                padName = "default";
+}
             var padNum = urlParams.get('num');
 
             if (padName && padNum) {
                 // Use the specified pad name as the Firebase reference
                 ref = ref.child(padName).child(padNum);
+            } else if (padNum){
+                ref = ref.child('default').child(padNum);
+                console.warn("Missing 'pad' in URL. Using default Firebase reference: /default/1");
             } else {
-                ref = ref.child('default').child('1');
-                console.warn("Missing 'pad' or 'num' in URL. Using default Firebase reference: /default/1");
+                console.warn("Missing 'pad' and 'num' in URL. Using default Firebase reference: /default/1");
             }
-                // console.log("here");
-            // } else if (padName){
-            //     console.error("No 'pad' parameter found in the URL. Please include a valid Contact Id.");
-            // } else if (padNum) {
-            //     console.error("No 'num' parameter found in the URL. Please include a valid Contact Id.");
-            // }
+
 
             if (typeof console !== 'undefined') {
                 console.log('Firebase data: ', ref.toString());
@@ -234,93 +220,114 @@ html,
             return ref;
         }
 
-        // function getContactIdList(callback) {
-        //     fetch("contact.csv")
+
+        // function getArticlesList(callback) {
+        //     fetch("contents.csv")
         //         .then(response => {
-        //           console.log("csv fetch");
         //             if (!response.ok) {
         //                 throw new Error(`Network response was not ok: ${response.statusText}`);
         //             }
         //             return response.text();
         //         })
         //         .then(csvText => {
-        //           console.log("CSV Content:", csvText); 
-        //             Papa.parse(csvText, {
-        //                 header: true, 
-        //                 skipEmptyLines: true,
-        //                 complete: function(results) {
-        //                     if (!results.meta.fields.includes("Contact Id")) {
-        //                         callback(new Error('"Contact Id" column not found'), []);
-        //                         console.log("parseif");
-        //                         return;
-        //                     }
-        //                     const contactIds = results.data.map(row => row["Contact Id"]);
-        //                     callback(null, contactIds);
-        //                 },
-        //                 error: function(err) {
-        //                   console.log("err");
-        //                     callback(err, []);
-        //                 }
-        //             });
-        //         })
-        //         .catch(error => {
-        //             console.error("Error fetching the CSV file:", error);
-        //             callback(error, []);
-        //         });
-        // }
+        //           Papa.parse(csvText, {
+        //               header: true, // Automatically parse headers
+        //               skipEmptyLines: true, // Skip any empty lines in the CSV
+        //               complete: function(results) {
+        //                   const data = results.data; // The parsed rows
+        //                   const errors = results.errors; // Any parsing errors
+
+        //                   if (errors.length > 0) {
+        //                       throw new Error("Error parsing CSV: " + errors[0].message);
+        //                   }
+
+        //                   // Check for the required columns
+        //                   if (!results.meta.fields.includes("html1") || !results.meta.fields.includes("abstract1")) {
+        //                       throw new Error('"html" and/or "abstract" columns not found in the CSV header');
+        //                   }
+        //                   if (!results.meta.fields.includes("contactId")) {
+        //                       throw new Error('contactId column not found in the CSV header');
+        //                   }
+
+        //                   // Extract articles with 'article' and 'abstract' fields
+        //                   const articles = data.map(row => ({
+        //                       contactId: row.contactId.trim(),
+        //                       html1: row.html1.trim(), 
+        //                       abstract1: row.abstract1.trim(),
+        //                       html2: row.html2.trim(), // Trim any extra spaces
+        //                       abstract2: row.abstract2.trim(),
+        //                       html3: row.html3.trim(), // Trim any extra spaces
+        //                       abstract3: row.abstract3.trim()
+        //                   }));
+
+        //                   callback(null, articles); // Pass articles to the callback
+        //               },
+        //               error: function(err) {
+        //                   console.error("Parsing error:", err);
+        //                   callback(err, []);
+        //               }
+        //           });
+        //       })
+
+              
+        //       .catch(error => {
+        //           console.error("Error fetching or parsing the CSV file:", error);
+        //           callback(error, []);
+        //       });}
 
 
-        function getArticlesList(callback) {
-            fetch("contents.csv")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok: ${response.statusText}`);
-                    }
-                    return response.text();
-                })
-                .then(csvText => {
-                  Papa.parse(csvText, {
-                      header: true, // Automatically parse headers
-                      skipEmptyLines: true, // Skip any empty lines in the CSV
-                      complete: function(results) {
-                          const data = results.data; // The parsed rows
-                          const errors = results.errors; // Any parsing errors
+            function getArticlesList(callback) {
+                fetch("version_contents.csv")
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Network response was not ok: ${response.statusText}`);
+                        }
+                        return response.text();
+                    })
+                    .then(csvText => {
+                        Papa.parse(csvText, {
+                            header: true,
+                            skipEmptyLines: true,
+                            complete: function (results) {
+                                const data = results.data;
+                                const errors = results.errors;
 
-                          if (errors.length > 0) {
-                              throw new Error("Error parsing CSV: " + errors[0].message);
-                          }
+                                if (errors.length > 0) {
+                                    throw new Error("Error parsing CSV: " + errors[0].message);
+                                }
 
-                          // Check for the required columns
-                          if (!results.meta.fields.includes("html1") || !results.meta.fields.includes("abstract1")) {
-                              throw new Error('"html" and/or "abstract" columns not found in the CSV header');
-                          }
-                          if (!results.meta.fields.includes("contactId")) {
-                              throw new Error('contactId column not found in the CSV header');
-                          }
+                                if (!results.meta.fields.includes("version") || !results.meta.fields.includes("html1") || !results.meta.fields.includes("abstract1")) {
+                                    throw new Error('CSV is missing required columns like "version", "html1", or "abstract1"');
+                                }
 
-                          // Extract articles with 'article' and 'abstract' fields
-                          const articles = data.map(row => ({
-                              contactId: row.contactId.trim(),
-                              html1: row.html1.trim(), 
-                              abstract1: row.abstract1.trim(),
-                              html2: row.html2.trim(), // Trim any extra spaces
-                              abstract2: row.abstract2.trim(),
-                              html3: row.html3.trim(), // Trim any extra spaces
-                              abstract3: row.abstract3.trim()
-                          }));
+                                // Map CSV rows by version (as string)
+                                const articles = {};
+                                data.forEach(row => {
+                                    const versionKey = row.version.trim();
+                                    articles[versionKey] = {
+                                        html1: row.html1.trim(),
+                                        abstract1: row.abstract1.trim(),
+                                        html2: row.html2.trim(),
+                                        abstract2: row.abstract2.trim(),
+                                        html3: row.html3.trim(),
+                                        abstract3: row.abstract3.trim()
+                                    };
+                                });
 
-                          callback(null, articles); // Pass articles to the callback
-                      },
-                      error: function(err) {
-                          console.error("Parsing error:", err);
-                          callback(err, []);
-                      }
-                  });
-              })
-              .catch(error => {
-                  console.error("Error fetching or parsing the CSV file:", error);
-                  callback(error, []);
-              });}
+                                callback(null, articles);
+                            },
+                            error: function (err) {
+                                console.error("Parsing error:", err);
+                                callback(err, {});
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error fetching or parsing the CSV file:", error);
+                        callback(error, {});
+                    });
+}
+
 
     </script>
 </body>
