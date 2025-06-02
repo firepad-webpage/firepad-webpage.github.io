@@ -7,96 +7,97 @@
 </head>
 <body>
     <h2>Excerpt</h2>
-    <p>Serverless computing, as a new programming paradigm, has revolutionized how applications utilize cloud resources.</p>
-
-<p>Various application domains, such as web services, online video processing, data analytics, scientific computing, and machine learning have embraced serverless computing model as this model simplifies how users deploy applications.</p>
-
-<p>Serverless functions are latency-sensitive due to their short execution time—often in the range of seconds—leaving limited time for platforms to prepare a container, which takes over hundreds of milliseconds, severely inflating function response time, known as the notorious cold-start problem.</p>
-
-<p>Serverless workloads are highly volatile, bursty, and hard-to-predict—recent research indicates that over 50% of functions on Microsoft Azure Function witness significantly varying invocation patterns.</p>
-
-<p>The full-container caching has been widely applied as an effective solution addressing the burstiness in serverless computing.</p>
-
-<p>Any mispredictions may lead to frequent cold-starts and vast memory waste.</p>
-
-<p>Partial container caching increases the number of containers in memory, thus raising the hit rate of partially initialized containers.</p>
-
-<p>Container sharing decreases the number of containers in memory due to their increased size but generalizes a container to be hit by different functions, raising the hit rate of the “over-packed” containers.</p>
-
-<p>Both partial caching and container sharing solutions fail to strike a fundamental balance between cold-start mitigation and memory wasting.</p>
-
-<p>We argue that partial container caching and sharing must be synergized to mitigate cold-starts with minimal memory waste.</p>
-
-<p>RainbowCake enables layer-wise container caching and sharing by carefully exploiting different layers’ generalities: Lower-level container layers are lighter and can be shared by more functions. Higher-level layers save more start-up latency but are heavier and more specialized.</p>
-
-<p>RainbowCake leverages invocations’ historical information to customize pre-warm and keep-alive strategies tailored to every function.</p>
-
-<p>RainbowCake is designed to proactively pre-warm and keep-alive containers with fine-grained layer-wise caching decisions.</p>
-
-<p>RainbowCake should enable function invocations to reuse and share containers with different layers.</p>
-
-<p>RainbowCake should effectively mitigate cold-starts and maintain stable resource wasting when dealing with such burstiness and potential mispredictions.</p>
-
-<p>RainbowCake should be able to effectively mitigate cold-starts of high concurrent invocations without introducing non-negligible overhead.</p>
-
-<p>RainbowCake has two key components: the History Recorder and the Container Pool.</p>
-
-<p>The History Recorder keeps observing invocation request arrivals and captures the invocation patterns by fitting sharing-aware distribution models with the collected invocation arrival records.</p>
-
-<p>The Container Pool maintains containers of different layers and executes event-driven pre-warming and keep-alive operations according to the estimation of upcoming invocations.</p>
-
-<p>RainbowCake enables idle containers partial keep-alive ability for safe and cross-function reuse.</p>
-
-<p>We keep A’s User container alive for a while, then peel off the User layer of A, which downgrades to a Lang container.</p>
-
-<p>Function B invocation can now reuse the Lang container since they have the same language runtime.</p>
-
-<p>B invocation reuses the Lang container by installing its own User layer inside it, which can be considered as a partial warm-start that saves the startup time of installing Lang and Bare layers.</p>
-
-<p>We peel off the User and Lang layers of B’s container during keep-alive, and C invocation can still reuse the Bare container of B with a partial warm-start to reduce startup latency.</p>
-
-<p>A Bare container has only initialized the infrastructural environment and utilities for containers.</p>
-
-<p>A Lang container has initialized a container with a language runtime based on the Bare container.</p>
-
-<p>A User container, also known as a full-size container, has initialized user library/codebase based on the Lang container.</p>
-
-<p>With a joint design of partial container caching and sharing, RainbowCake can achieve both a low function end-to-end latency and minimal memory cost.</p>
-
-<p>RainbowCake carefully makes pre-warm & keep-alive decisions on caching proportions of containers to different layers at runtime with cross-function sharing awareness.</p>
-
-<p>We leverage invocation history to model the sharing-aware arrival distributions of hits on each container type.</p>
-
-<p>We fit the invocation distribution of function f using a sliding window on the latest n invocations.</p>
-
-<p>RainbowCake enforces TTL-based pre-warming and keep-alive strategies when provisioning fine-grained containers layer-wise.</p>
-
-<p>We propose an event-driven heuristic algorithm to dynamically adjust the length of pre-warming and keep-alive TTLs in real-time.</p>
-
-<p>Upon the latest invocation arrival, RainbowCake’s container pool queries the function history to estimate the IAT.</p>
-
-<p>Pre-warmed containers proceed to the keep-alive period immediately after startup, which can further downgrade and be reused by other invocations.</p>
-
-<p>Every idle container needs to uninstall three layers sequentially in a keep-alive period: User, Lang, and Bare.</p>
-
-<p>We ensure Lang and Bare containers are isolated from any user-related contents by removing them before sharing the container with other functions.</p>
-
-<p>RainbowCake guarantees that a User container’s user remnants are completely wiped out before moving to Lang and Bare.</p>
-
-<p>We implement RainbowCake in Apache OpenWhisk, an open-source, distributed serverless platform that executes functions using Docker containers.</p>
-
-<p>RainbowCake is implemented with 8K lines of Scala for OpenWhisk modifications and 2K lines of Python for user client that runs experiments.</p>
-
-<p>RainbowCake can configure three important system parameters: knob parameter α that balances the initialization cost and memory waste cost, window size n that keeps historical information of recent invocations, and the quantile p that represents the confidence for estimating invocation IATs.</p>
-
-<p>RainbowCake achieves significantly less memory wasting than five baselines when the IAT CV increases.</p>
-
-<p>RainbowCake shows significantly less total startup latency when the memory budget is limited.</p>
-
-<p>RainbowCake’s pre-warming and keep-alive decisions incur negligible operational overhead compared to the original decision space.</p>
-
-<p>Experimental results showed that RainbowCake reduces 68% startup latency and 77% container memory waste compared to existing solutions.</p>
+        <p>GNNs have witnessed widespread adoption for graph-level prediction tasks due to their impressive performance.</p>
+      
+        <p>Unfortunately, like other deep-learning models, GNNs are considered black boxes due to their lack of transparency and interpretability.</p>
+      
+        <p>This lack of interpretability presents a significant barrier to their adoption in critical domains such as healthcare, finance, and law enforcement.</p>
+      
+        <p>Additionally, the ability to explain predictions is crucial for understanding potential flaws in the model and generating insights for further refinement.</p>
+      
+        <p>Instance-level focus limits its ability to extract patterns utilized by GNNs at a global level across a multitude of graphs and how these patterns are combined into a single decision-making rule.</p>
+      
+        <p>The objective of our work is to develop an end-to-end global explainer that mines the subgraph concepts used by a black-box GNN model, and then uncovers the boolean logic used by the GNN over these concepts to make its predictions.</p>
+      
+        <p>XGNN and GNNInterpreter are generative-modeling based global explainers.</p>
+      
+        <p>This dependency creates a disconnect with the objective, as instance-level explainers lack a global understanding of the model.</p>
+      
+        <p>Our proposed approach develops an end-to-end pipeline that mines concepts based on global trends.</p>
+      
+        <p>In GLGEXPLAINER, each concept in the formula corresponds to a feature vector and not a subgraph.</p>
+      
+        <p>GLGEXPLAINER randomly selects a subgraph from the cluster, assuming all subgraphs in a cluster are similar.</p>
+      
+        <p>This assumption is rarely true in practice, compromising both interpretability and efficacy.</p>
+      
+        <p>Due to the reliance on instance-level explanations, even when data are drawn from the same distribution, the base concept candidates vary, and consequently so does the eventual formula.</p>
+      
+        <p>We present an end-to-end, post-hoc, global GNN explainer called GRAPHTRAIL.</p>
+      
+        <p>GRAPHTRAIL exploits the fact that a message passing GNN decomposes a graph into a set of computation trees.</p>
+      
+        <p>The global impact of computation trees is assessed using Shapley values, and then mapped to a boolean formula over concepts using symbolic regression.</p>
+      
+        <p>Extensive experiments across a diverse set of datasets, GNN architectures and pooling function, demonstrate GRAPHTRAIL to significantly surpass existing global explainers in efficacy, human-interpretability, data efficiency, and robustness.</p>
+      
+        <p>We formulate the problem of translating a message-passing GNN model for graph classification into a human-interpretable logic formula over subgraph concepts.</p>
+      
+        <p>GRAPHTRAIL enables us to limit the exploration of concepts from an exponential subgraph search space to a linear space of computation trees.</p>
+      
+        <p>Subsequently, the impact of each of the computation trees is assessed through its Shapley Value, and the top-k trees are sent to the logic formulator.</p>
+      
+        <p>The Boolean logic is revealed by the symbolic regression over these computation trees.</p>
+      
+        <p>The message passing architecture of GNNs limits the embedding computation of a node within the computation tree rooted at that node.</p>
+      
+        <p>Given a graph, we can decompose it into a multiset of computation trees, compute node embeddings, and then aggregate them into graph embedding without incurring any loss of information.</p>
+      
+        <p>This computation structure enables us to shrink the candidate space of concepts to the set of unique computation trees.</p>
+      
+        <p>The reformulation of the concept space imparts several desirable side-effects.</p>
+      
+        <p>First, the size of the candidate space of concepts reduces from exponential to a quantity linear to the graph size and the number of graphs in the dataset.</p>
+      
+        <p>Second, while graph isomorphism has a computational cost exponential to the graph size, rooted-tree isomorphism can be performed in time linear to the number of edges in the tree.</p>
+      
+        <p>Third, GNNs may map non-isomorphic node neighborhoods to isomorphic computation trees.</p>
+      
+        <p>To mine concepts from the candidate space, we assess their Shapley values.</p>
+      
+        <p>We aim to leverage Shapley values in identifying this combination.</p>
+      
+        <p>We select the top-k computation trees with the highest Shapley value as concepts.</p>
+      
+        <p>GRAPHTRAIL projects each graph into a concept vector.</p>
+      
+        <p>The concept vector of a graph is a vector where each dimension represents the number of computation trees in the graph that are isomorphic to a concept candidate.</p>
+      
+        <p>Computing the graph embedding simply involves look-ups of vectors instead of fresh rounds of message-passing.</p>
+      
+        <p>To discover logical rules over top-k computation trees, we perform symbolic regression.</p>
+      
+        <p>We restrict to the boolean operators: conjunction, disjunction, negation, and XOR.</p>
+      
+        <p>We aim to learn a symbolic function for each class label predicted by the GNN.</p>
+      
+        <p>Symbolic regression poses a combinatorial optimization challenge, as the number of potential functions increases exponentially with the number of symbols.</p>
+      
+        <p>We use an algorithm which leverages a multi-population evolutionary strategy to efficiently optimize and identify symbolic expressions.</p>
+      
+        <p>GRAPHTRAIL achieves higher fidelity than GLGEXPLAINER across all scenarios.</p>
+      
+        <p>GRAPHTRAIL’s inferred concepts and their logical combination exhibit greater similarity to the ground truth compared to GLGEXPLAINER’s results.</p>
+      
+        <p>We have designed an end-to-end, post-hoc, global graph neural network explainer called GRAPHTRAIL.</p>
+      
+        <p>GRAPHTRAIL evaluates the impact of these computation trees using Shapley values and then creates a boolean formula via symbolic regression only with the important ones.</p>
+      
+        <p>We believe attempting to interpret GNNs with subgraph level concepts creates a dilemma between interpretability and faithfulness to the computational mechanism of GNNs.</p>
+      
+        <p>It is worth exploring how the best balance between human interpretability and staying faithful to GNN computation structure can be obtained.</p>
+      
 <h2>Original Abstract</h2> 
-<p>Serverless computing has transformed cloud application deployment by simplifying resource utilization across various domains, including web services, machine learning, and scientific computing. However, a significant challenge in serverless environments is the cold-start problem, where the time required to initialize containers increases function response latency. This issue is exacerbated by the bursty and unpredictable nature of serverless workloads, with mispredictions often leading to frequent cold-starts and memory waste. Existing solutions, such as partial container caching and container sharing, struggle to balance cold-start mitigation with efficient memory usage. This paper introduces RainbowCake, a novel approach that synergizes partial caching and container sharing to address these issues. RainbowCake employs a layer-wise container caching and sharing strategy, leveraging historical invocation data to tailor pre-warming and keep-alive decisions. By dynamically managing container layers and maintaining idle containers for cross-function reuse, RainbowCake minimizes both cold-start latency and memory waste. Implemented in Apache OpenWhisk, experimental results demonstrate that RainbowCake reduces startup latency by 68% and container memory waste by 77%, while incurring negligible operational overhead. These findings highlight RainbowCake’s effectiveness in optimizing serverless function performance.</p>
+<p>Graph Neural Networks (GNNs) have achieved strong performance in graph-level prediction tasks but remain opaque due to their limited interpretability, hindering adoption in sensitive domains. Existing global explainers often rely on subgraph-level abstractions or instance-level analysis, which fails to capture model-wide decision logic. This work introduces GRAPHTRAIL, a post-hoc, end-to-end global explainer that translates the behavior of a black-box GNN into a human-interpretable boolean formula over learned subgraph concepts. GRAPHTRAIL leverages the computation tree structure induced by message passing in GNNs, reducing the candidate concept space from exponential to linear complexity. It ranks trees using Shapley values and applies symbolic regression to learn interpretable decision rules. Extensive experiments demonstrate that GRAPHTRAIL surpasses existing methods in fidelity, robustness, data efficiency, and interpretability. By aligning explanations with the computational structure of GNNs, GRAPHTRAIL offers a principled approach to understanding and trusting their predictions.</p>
     </body>
 </html>
